@@ -23,6 +23,3 @@ spec:
             memory: "512M"
         ports:
         - containerPort: 5000
-        envFrom:
-          - configMapRef:
-              name: simulator
