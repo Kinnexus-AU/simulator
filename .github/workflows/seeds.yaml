@@ -1,4 +1,4 @@
-name: Build image and restart services
+name: Build seeds image
 on:
   push:
     branches:
@@ -17,16 +17,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Prepare config
-        run: cp contrib/emr-config/config.production.js contrib/emr-config/config.js
-      - name: Install deps
-        run: yarn install --network-concurrency 1
-      - run: yarn extract
-      - run: yarn compile
-      - run: yarn build
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v3
       - name: Setup Docker builder
@@ -44,7 +34,7 @@ jobs:
       - name: Build and push the Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: resources
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-seeds:latest
