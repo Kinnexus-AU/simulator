@@ -1,0 +1,68 @@
+services:
+  aidbox:
+    image: healthsamurai/aidboxone:2507
+    depends_on:
+      - aidbox-db
+    links:
+      - "aidbox-db:database"
+    ports:
+      - "8080:8080"
+    environment:
+      PGHOST: database
+      PGDATABASE: aidbox
+      PGPORT: 5432
+      PGUSER: postgres
+      PGPASSWORD: postgres
+    env_file:
+      - ./env/aidbox
+      - .env
+    volumes:
+      - ./resources:/resources
+    healthcheck:
+      interval: 1s
+      timeout: 20s
+      retries: 100
+      test: curl --fail http://aidbox:8080/health || exit 1
+  aidbox-db:
+    image: "healthsamurai/aidboxdb:16.1"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: aidbox
+  sdc:
+    image: bedasoftware/fhir-sdc:1.0.0a13
+    depends_on:
+      aidbox:
+        condition: service_healthy
+    links:
+      - aidbox
+    env_file:
+      - ./env/sdc
+    tty: true
+  fhir-converters-app:
+    image: bedasoftware/aidbox-fhir-converter:main
+    depends_on:
+      aidbox:
+        condition: service_healthy
+    env_file:
+      - ./env/fhir-converters-app
+  build-seeds:
+    image: bedasoftware/fhirsnake:latest
+    command:
+      - export
+      - --output
+      - /app/resources/initBundle.json
+    volumes:
+      - ./resources/seeds:/app/resources
+    env_file:
+      - env/seeds
+  watch-seeds:
+    image: bedasoftware/fhirsnake:latest
+    command:
+      - watch
+      - --external-fhir-server-url
+      - http://root:secret@aidbox:8080
+    volumes:
+      - ./resources/seeds:/app/resources
+    env_file:
+      - env/seeds

@@ -33,3 +33,4 @@ contrib/emr-config/config.js
 
 *storybook.log
 storybook-static
+.env

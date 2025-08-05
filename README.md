@@ -1,13 +1,14 @@
-# EMR template
+# Aged Care software simulator
 
 - [Docs](https://docs.emr.beda.software/Developers%20Guide/custom-emr-build)
 - [Beda EMR](https://github.com/beda-software/fhir-emr)
 
 ## Intro
 
-Beda EMR is designed to be a framework for building EHR and EMR solutions on top of it. This article describes how you can build your own custom version of Beda EMR suitable for your needs.
+Aged Care software simulator is a part of kinnexus project.
+The goal of this simulator is demostarte integraiton between aged care software and kinnexust smart on FHIR application.
 
-We prepared [Beda EMR template](https://github.com/beda-software/emr-template) for quick project initialization. The template
+This project
 - uses [vitejs](https://vitejs.dev/) and [yarn](https://yarnpkg.com/) for building frontend;
 - already includes all required dev dependencies;
 - includes [Beda EMR](https://github.com/beda-software/fhir-emr) as dependency so you could use containers, components, utils, etc. for you EMR;
@@ -57,13 +58,12 @@ Next steps:
 
 Copy envs
 ```
-cp contrib/fhir-emr/.env.tpl contrib/fhir-emr/.env
+cp .env.tpl .env
 ```
 
 add your aidbox license to .env
 
 ```
-cd contrib/fhir-emr
 docker-compose up
 ```
 

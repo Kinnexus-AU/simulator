@@ -1,0 +1,8 @@
+auth:
+  implicit:
+    redirect_uri: "${EMR_BASE_URL}/auth"
+first_party: true
+grant_types:
+  - implicit
+id: web
+resourceType: Client

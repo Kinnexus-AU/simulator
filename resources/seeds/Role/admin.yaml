@@ -1,0 +1,8 @@
+name: admin
+user:
+  reference: User/admin
+links:
+  organization:
+    reference: Organization/beda-emr
+id: admin
+resourceType: Role
