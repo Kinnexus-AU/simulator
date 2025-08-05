@@ -2,7 +2,10 @@ import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
 import React, { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
+import { Route } from 'react-router-dom';
 
+import { MenuLayout } from '@beda.software/emr/dist/components/BaseLayout/Sidebar/SidebarTop/context';
+import { PatientsIcon } from '@beda.software/emr/icons';
 import '@beda.software/emr/dist/services/initialize';
 import 'antd/dist/reset.css';
 import '@beda.software/emr/dist/style.css';
@@ -13,11 +16,37 @@ import '@beda.software/emr/dist/style.css';
 // You can specify your own theme to ajdust color,
 // Use you https://github.com/beda-software/fhir-emr/blob/master/src/theme/ThemeProvider.tsx as example
 import { App } from '@beda.software/emr/containers';
-import { PatientDashboardProvider } from '@beda.software/emr/dist/components/Dashboard/contexts';
-import { dashboard } from '@beda.software/emr/dist/dashboard.config';
 import { ThemeProvider } from '@beda.software/emr/theme';
+import { ValueSetExpandProvider } from '@beda.software/emr/contexts';
 
 import { dynamicActivate, getCurrentLocale } from './services/i18n';
+import { PatientList, PatientDetails } from './containers/Patients';
+import { isSuccess } from '@beda.software/remote-data';
+import { expandExternalTerminology } from '@beda.software/emr/services';
+import { Coding } from 'fhir/r4b';
+
+const menu = () => [{ label: "Patients", path: '/patients', icon: <PatientsIcon /> }]
+
+async function expandEMRValueSet(
+    answerValueSet: string | undefined,
+    searchText: string,
+    preferredTerminologyServer?: string,
+): Promise<Coding[]> {
+    if (!answerValueSet) {
+        return [];
+    }
+
+    if (answerValueSet) {
+        const res = await expandExternalTerminology(preferredTerminologyServer ?? 'https://tx.dev.hl7.org.au/fhir', answerValueSet, searchText);
+        if (isSuccess(res)) {
+            return res.data;
+        }
+    }
+
+    return [];
+}
+
+
 
 export const AppWithContext = () => {
     useEffect(() => {
@@ -26,11 +55,21 @@ export const AppWithContext = () => {
 
     return (
         <I18nProvider i18n={i18n}>
-            <PatientDashboardProvider dashboard={dashboard}>
-                <ThemeProvider>
-                    <App />
-                </ThemeProvider>
-            </PatientDashboardProvider>
+            <ThemeProvider>
+                <ValueSetExpandProvider.Provider value={expandEMRValueSet}>
+                    <MenuLayout.Provider value={menu}>
+                        <App
+                            authenticatedRoutes={
+                                <>
+                                    <Route path="/patients" element={<PatientList />} />
+                                    <Route path="/patients/:id" element={<PatientDetails />} />
+                                    <Route path="/patients/:id/*" element={<PatientDetails />} />
+                                </>
+                            }
+                        />
+                    </MenuLayout.Provider>
+                </ValueSetExpandProvider.Provider>
+            </ThemeProvider>
         </I18nProvider>
     );
 };

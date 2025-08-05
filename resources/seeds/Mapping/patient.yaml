@@ -1,0 +1,29 @@
+type: FHIRPath
+resourceType: Mapping
+body:
+  "{% assign %}":
+    - patientId: "{{ %QuestionnaireResponse.answers('patient-id') }}"
+    - firstName: "{{ %QuestionnaireResponse.answers('first-name') }}"
+    - lastName: "{{ %QuestionnaireResponse.answers('last-name') }}"
+    - gender: "{{ %QuestionnaireResponse.answers('gender') }}"
+    - birthDate: "{{ %QuestionnaireResponse.answers('birth-date') }}"
+  resourceType: Bundle
+  type: transaction
+  entry:
+    - request:
+        "{% if %patientId.exists() %}":
+          url: "/Patient/{{ %patientId }}"
+          method: PUT
+        "{% else %}":
+          url: /Patient
+          method: POST
+      fullUrl: urn:uuid:patient-id
+      resource:
+        resourceType: Patient
+        active: true
+        name:
+          - given:
+            - "{{ %firstName }}"
+            family: "{{ %lastName }}"
+        gender: "{{ %gender.code }}"
+        birthDate: "{{ %birthDate }}"
