@@ -15,19 +15,19 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: simulator-sdc
+  name: sdc-simulator
 spec:
   replicas: 1
   selector:
     matchLabels:
-      workload: simulator-sdc
+      workload: sdc-simulator
   template:
     metadata:
       labels:
-        workload: simulator-sdc
+        workload: sdc-simulator
     spec:
       containers:
-      - name: simulator-sdc
+      - name: sdc-simulator
         image: bedasoftware/fhir-sdc:1.0.0a13
         imagePullPolicy: Always
         resources:
@@ -39,9 +39,9 @@ spec:
         - containerPort: 8081
         env:
         - name: APP_URL
-          value: "http://simulator-sdc:8081"
+          value: "http://sdc-simulator:8081"
         - name: APP_INIT_URL
-          value: "http://simulator-aidbox-api:80"
+          value: "http://aidbox-simulator-api:80"
         - name: APP_PORT
           value: "8081"
         - name: AIO_PORT
