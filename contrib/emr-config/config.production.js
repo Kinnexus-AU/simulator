@@ -2,7 +2,7 @@ const config = {
     clientId: 'web',
 
     tier: 'production',
-    baseURL: 'https://aidbox.kinnexus.beda.software',
+    baseURL: 'https://aidbox.simulator.kinnexus.beda.software',
 };
 
 export { config as default };
