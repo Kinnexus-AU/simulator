@@ -1,0 +1,100 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: aidbox
+spec:
+  interval: 1m
+  url: https://kinnexus-au.github.io/helm-charts/
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: aidbox-simulator
+spec:
+  interval: 1m
+  timeout: 5m
+  chart:
+    spec:
+      chart: aidbox
+      version: 0.2.4
+      sourceRef:
+        kind: HelmRepository
+        name: aidbox
+      interval: 1m
+  releaseName: aidbox
+  values:
+    fullnameOverride: aidbox-simulator
+    host: aidbox.simulator.kinnexus.beda.software
+    protocol: https
+    image:
+      tag: stable
+    config:
+      BOX_FHIR_CREATEDAT_URL: https://aidbox.app/ex/createdAt
+      BOX_BOOTSTRAP_FHIR_PACKAGES: "hl7.fhir.r4.core#4.0.1"
+      BOX_FHIR_SCHEMA_VALIDATION: true
+      #BOX_FHIR_TERMINOLOGY_SERVICE_BASE_URL: "https://tx.dev.hl7.org.au/fhir"
+      BOX_FHIR_TERMINOLOGY_SERVICE_BASE_URL: https://tx.health-samurai.io/fhir
+      BOX_FEATURES_ORGBAC_ENABLE: false
+      BOX_FHIR_COMPLIANT_MODE: true
+      BOX_FHIR_SEARCH_DEFAULT_PARAMS_TOTAL: accurate
+      BOX_INIT_BUNDLE: file:///home/aidbox/bundle/initBundle.json
+      AIDBOX_VALIDATOR_STRICT_EXTENSION_RESOLUTION_ENABLED: true
+      AIDBOX_VALIDATOR_STRICT_PROFILE_RESOLUTION_ENABLED: true
+    extraEnvFromSecrets:
+      - aidbox-simulator-license
+      - aidbox-simulator-auth
+      - aidbox-simulator-database
+    extraEnvFromConfigMaps:
+      - aidbox-simulator-database
+    volumes:
+      - name: postgres-cert-source
+        secret:
+          secretName: cloud-postgres-cert
+          defaultMode: 438 #"0666"
+      - name: postgres-cert-dest
+        emptyDir:
+          sizeLimit: "64k"
+      - name: init-bundle-dest
+        emptyDir:
+          sizeLimit: "64k"
+    initContainers:
+    - name: setup-database-certificates
+      image: alpine:3.6
+      command:
+      - sh
+      - -c
+      - |
+        apk update && \
+        apk add openssl && \
+        cp /source/* /dest && \
+        openssl pkcs8 -topk8 -inform PEM -outform DER -in /dest/client-key.pem -out /dest/client.pk8 -nocrypt && \
+        chown 1000 /dest/* && \
+        chmod 0400 /dest/*
+      volumeMounts:
+      - name: postgres-cert-source
+        mountPath: /source
+        readOnly: true
+      - name: postgres-cert-dest
+        mountPath: /dest
+    - name: interpolate-init-bundle
+      image: ghcr.io/kinnexus-au/simulator-seeds
+      envFrom:
+      - secretRef:
+          name: aidbox-simulator-auth
+      env:
+      - name: EMR_BASE_URL
+        value: https://simulator.kinnexus.beda.software
+      volumeMounts:
+      - name: init-bundle-dest
+        mountPath: /data
+    volumeMounts:
+    - name: postgres-cert-dest
+      mountPath: /home/aidbox/.postgresql
+    - name: init-bundle-dest
+      mountPath: /home/aidbox/bundle
+    ingress:
+      enabled: false
+    resources:
+      limits:
+        memory: 2Gi
