@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simulator-sdc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      workload: simulator-sdc
+  template:
+    metadata:
+      labels:
+        workload: simulator-sdc
+    spec:
+      containers:
+      - name: simulator-sdc
+        image: bedasoftware/fhir-sdc:1.0.0a13
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "500M"
+          limits:
+            memory: "1Gi"
+        ports:
+        - containerPort: 8081
+        env:
+        - name: APP_URL
+          value: "http://simulator-sdc:8081"
+        - name: APP_INIT_URL
+          value: "http://simulator-aidbox-api:80"
+        - name: APP_PORT
+          value: "8081"
+        - name: AIO_PORT
+          value: "8081"
+        - name: AIO_HOST
+          value: "0.0.0.0"
+        - name: CREATE_MANIFEST_ATTRS
+          value: "False"
+        - name: CONSTRAINT_LEGACY_BEHAVIOR
+          value: "False"
+        - name: FHIRPATH_MAPPING_SERVICE
+          value: fpml
+        envFrom:
+          - secretRef:
+              name: simulator-sdc
