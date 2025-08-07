@@ -38,10 +38,12 @@ spec:
         ports:
         - containerPort: 8081
         env:
-        - name: APP_URL
-          value: "http://sdc-simulator:8081"
         - name: APP_INIT_URL
           value: "http://aidbox-simulator-api:80"
+        - name: APP_ID
+          value: "sdc"
+        - name: APP_URL
+          value: "http://sdc-simulator:8081"
         - name: APP_PORT
           value: "8081"
         - name: AIO_PORT
