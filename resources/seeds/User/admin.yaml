@@ -1,0 +1,3 @@
+password: "${BOX_ADMIN_PASSWORD}"
+resourceType: User
+id: admin
