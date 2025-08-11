@@ -1,4 +1,5 @@
 import { i18n } from '@lingui/core';
+import { t } from '@lingui/macro';
 import { I18nProvider } from '@lingui/react';
 import React, { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -25,7 +26,7 @@ import { isSuccess } from '@beda.software/remote-data';
 import { expandExternalTerminology } from '@beda.software/emr/services';
 import { Coding } from 'fhir/r4b';
 
-const menu = () => [{ label: "Patients", path: '/patients', icon: <PatientsIcon /> }]
+const menu = () => [{ label: t`Residents`, path: '/patients', icon: <PatientsIcon /> }]
 
 async function expandEMRValueSet(
     answerValueSet: string | undefined,

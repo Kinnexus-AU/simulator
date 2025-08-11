@@ -9,7 +9,7 @@ import { formatHumanDate, renderHumanName } from '@beda.software/emr/utils';
 export function PatientList() {
     return (
         <ResourceListPage<Patient>
-            headerTitle={t`Patients`}
+            headerTitle={t`Residents`}
             resourceType="Patient"
             getTableColumns={() => [
                 {
@@ -33,21 +33,13 @@ export function PatientList() {
                     render: (_text, { resource }) => resource.gender,
                     width: 150,
                 },
-                {
-                    title: 'PhilHealth ID',
-                    dataIndex: 'identifier',
-                    key: 'identifier',
-                    render: (_text, { resource }) =>
-                        resource.identifier?.find(({ system }) => system === 'urn://example.com/ph-core/fhir/NamingSystem/philhealth-id-ns')?.value,
-                    width: 250,
-                },
             ]}
             getFilters={() => [
                 {
                     id: 'name',
                     searchParam: 'name',
                     type: SearchBarColumnType.STRING,
-                    placeholder: t`Find patient`,
+                    placeholder: t`Find resident`,
                     placement: ['search-bar', 'table'],
                 },
                 {
@@ -88,14 +80,14 @@ export function PatientList() {
                 questionnaireAction('Edit', 'patient'),
             ]}
             getHeaderActions={() => [
-                questionnaireAction(<Trans>Add patient</Trans>, 'patient', {
+                questionnaireAction(<Trans>Add resident</Trans>, 'patient', {
                     icon: <PlusOutlined />,
                     extra: {qrfProps: {launchContextParameters: [{name: 'Patient', resource: {resourceType: 'Patient'}}]}},
                 } ),
             ]}
             getReportColumns={(bundle) => [
                 {
-                    title: t`Number of Patients`,
+                    title: t`Number of residents`,
                     value: bundle.total,
                 },
             ]}
