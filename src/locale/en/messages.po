@@ -6,4 +6,43 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
 "Language: en\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
 
+#: src/containers/Patients/list.tsx:83
+msgid "Add resident"
+msgstr ""
+
+#: src/containers/Patients/list.tsx:23
+#: src/containers/Patients/list.tsx:49
+msgid "Birth date"
+msgstr ""
+
+#: src/containers/Patients/list.tsx:56
+msgid "Choose gender"
+msgstr ""
+
+#: src/containers/Patients/list.tsx:42
+msgid "Find resident"
+msgstr ""
+
+#: src/containers/Patients/list.tsx:30
+msgid "Gender"
+msgstr ""
+
+#: src/containers/Patients/list.tsx:16
+msgid "Name"
+msgstr ""
+
+#: src/containers/Patients/list.tsx:90
+msgid "Number of residents"
+msgstr ""
+
+#: src/containers/Patients/list.tsx:12
+#: src/main.tsx:29
+msgid "Residents"
+msgstr ""
