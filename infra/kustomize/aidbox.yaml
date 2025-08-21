@@ -39,6 +39,7 @@ spec:
       BOX_FHIR_COMPLIANT_MODE: true
       BOX_FHIR_SEARCH_DEFAULT_PARAMS_TOTAL: accurate
       BOX_INIT_BUNDLE: file:///home/aidbox/bundle/initBundle.json
+      AIDBOX_BASE_URL: https://aidbox.simulator.kinnexus.beda.software
       AIDBOX_VALIDATOR_STRICT_EXTENSION_RESOLUTION_ENABLED: true
       AIDBOX_VALIDATOR_STRICT_PROFILE_RESOLUTION_ENABLED: true
     extraEnvFromSecrets:
