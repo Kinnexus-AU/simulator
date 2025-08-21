@@ -10,6 +10,7 @@ import { PatientDocuments } from '@beda.software/emr/dist/containers/PatientDeta
 import { Route, Routes } from 'react-router-dom';
 import { PatientDocument } from '@beda.software/emr/dist/containers/PatientDetails/PatientDocument/index';
 import { PatientDocumentDetails } from '@beda.software/emr/dist/containers/PatientDetails/PatientDocumentDetails/index';
+import { PatientApps } from '@beda.software/emr/dist/containers/PatientDetails/PatientApps/index';
 import { WithId } from '@beda.software/fhir-react';
 
 
@@ -26,6 +27,11 @@ const tabs: Array<Tab<WithId<Patient>>> = [
         path: 'documents',
         label: 'Documents',
         component: ({ resource }) => <Documents patient={resource}/>
+    },
+    {
+        path: 'apps',
+        label: 'Smart Apps',
+        component: ({ resource }) => <PatientApps patient={resource} />,
     }
 ];
 
