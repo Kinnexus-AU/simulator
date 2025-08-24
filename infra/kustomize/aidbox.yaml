@@ -86,6 +86,8 @@ spec:
       env:
       - name: EMR_BASE_URL
         value: https://simulator.kinnexus.beda.software
+      - name: KINNEXUS_URL
+        value: https://kinnexus.beda.software
       volumeMounts:
       - name: init-bundle-dest
         mountPath: /data
