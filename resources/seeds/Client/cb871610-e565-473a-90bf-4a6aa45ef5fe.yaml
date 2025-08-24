@@ -1,0 +1,17 @@
+auth:
+  authorization_code:
+    redirect_uri: "${KINNEXUS_URL}/auth"
+    token_format: jwt
+    refresh_token: true
+    secret_required: false
+    access_token_expiration: 36000
+type: smart-on-fhir-practitioner
+smart:
+  name: Kinnexus
+  launch_uri: "${KINNEXUS_URL}/launch"
+  description: interRAI Long-Term Care Facilities Assessment
+grant_types:
+  - authorization_code
+id: cb871610-e565-473a-90bf-4a6aa45ef5fe
+resourceType: Client
+
