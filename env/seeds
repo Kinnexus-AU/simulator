@@ -1,1 +1,3 @@
 EMR_BASE_URL=http://localhost:3000
+BOX_ADMIN_PASSWORD=password
+KINNEXUS_URL=http://localhost:5173
