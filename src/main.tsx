@@ -17,7 +17,6 @@ import '@beda.software/emr/dist/style.css';
 // You can specify your own theme to ajdust color,
 // Use you https://github.com/beda-software/fhir-emr/blob/master/src/theme/ThemeProvider.tsx as example
 import { App } from '@beda.software/emr/containers';
-import { ThemeProvider } from '@beda.software/emr/theme';
 import { ValueSetExpandProvider } from '@beda.software/emr/contexts';
 
 import { dynamicActivate, getCurrentLocale } from './services/i18n';
@@ -25,6 +24,8 @@ import { PatientList, PatientDetails } from './containers/Patients';
 import { isSuccess } from '@beda.software/remote-data';
 import { expandExternalTerminology } from '@beda.software/emr/services';
 import { Coding } from 'fhir/r4b';
+
+import { ThemeProvider } from './theme';
 
 const menu = () => [{ label: t`Residents`, path: '/patients', icon: <PatientsIcon /> }]
 
