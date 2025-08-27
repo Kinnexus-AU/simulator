@@ -5,10 +5,50 @@
 
 ## Intro
 
-Aged Care software simulator is a part of kinnexus project.
-The goal of this simulator is demostarte integraiton between aged care software and kinnexust smart on FHIR application.
+Aged Care software simulator is a part of Kinnexus project.
+The goal of the simulator is to demonstrate integration between aged care software and Kinnexus SMART on FHIR application.
 
-This project
+![Architecture Diagram](https://github.com/user-attachments/assets/e59c08a2-c68c-4c5f-b29e-d0eccf1f15f0)
+
+
+## Integration test scenario
+
+User Story: Launch Kinnexus SMART ON FHIR app from Aged Care Software Simulator with Resident Context
+
+As a user testing integration,
+I want to log into the Aged Care software simulator, create a resident, and launch the Kinnexus app from the resident’s profile,
+so that I can validate that Kinnexus receives the correct resident context and pre-populates demographic data in the interRAI LTCF assessment.
+
+Acceptance Criteria
+
+- I can log into the Aged Care software simulator successfully.
+- From the Residents list page, I can:
+  - Create a new resident
+  - Enter and save their demographic data.
+  - After saving, I can open the Resident page for the newly created resident.
+- On the Resident page, I can navigate to the “Smart Apps” tab.
+- The tab contains a Kinnexus app button.
+- When I click the "Kinnexus" button:
+  - The Kinnexus app launches with the context of the current resident.
+  - Inside Kinnexus, I see the option “New Assessment.”
+- When I click “New Assessment”:
+  - A new interRAI LTCF assessment form is created for the resident.
+  - Resident demographic data is pre-populated in Section A.
+  - Section A is displayed in read-only mode.
+
+Definition of Done
+
+- Simulator allows creation and management of resident records.
+- Launching Kinnexus from the Smart Apps tab passes resident context correctly.
+- New Assessment creation in Kinnexus correctly pulls demographics from the simulator.
+
+## Defining SMART ON FHIR app in Simulator
+
+If you would like to define the launch of another SMART ON FHIR app from Simulator, you need to define new "Client" resource.
+The example of Client resource is here: https://github.com/Kinnexus-AU/simulator/blob/main/resources/seeds/Client/cb871610-e565-473a-90bf-4a6aa45ef5fe.yaml 
+
+
+## This project
 - uses [vitejs](https://vitejs.dev/) and [yarn](https://yarnpkg.com/) for building frontend;
 - already includes all required dev dependencies;
 - includes [Beda EMR](https://github.com/beda-software/fhir-emr) as dependency so you could use containers, components, utils, etc. for you EMR;
