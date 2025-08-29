@@ -7,14 +7,10 @@ item:
     text: PatientId
     type: string
     readOnly: true
-    extension:
-      - url: http://hl7.org/fhir/StructureDefinition/questionnaire-hidden
-        valueBoolean: true
-      - url: >-
-          http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression
-        valueExpression:
-          language: text/fhirpath
-          expression: "%Patient.id"
+    hidden: true
+    initialExpression:
+      language: text/fhirpath
+      expression: "%Patient.id"
 
   - linkId: iA1
     text: 1. Name
@@ -25,56 +21,39 @@ item:
         type: string
         required: true
         maxLength: 30
-        extension:
-          - url: http://hl7.org/fhir/StructureDefinition/entryFormat
-            value:
-              string: "Enter first name"
-          - url: >-
-              http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression
-            valueExpression:
-              language: text/fhirpath
-              expression: "%Patient.name.given[0]"
+        entryFormat: "Enter first name"
+        initialExpression:
+          language: text/fhirpath
+          expression: "%Patient.name.given[0]"
 
       - linkId: iA1b
         text: "b. Middle:"
         type: string
         required: false
         maxLength: 30
-        extension:
-          - url: http://hl7.org/fhir/StructureDefinition/entryFormat
-            value:
-              string: "Enter middle name"
-          - url: >-
-              http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression
-            valueExpression:
-              language: text/fhirpath
-              expression: "%Patient.name.given[1]"
+        entryFormat: "Enter middle name"
+        initialExpression:
+          language: text/fhirpath
+          expression: "%Patient.name.given[1]"
 
       - linkId: iA1c
         text: "c. Last:"
         type: string
         required: true
         extension:
-          - url: >-
-              http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression
-            valueExpression:
-              language: text/fhirpath
-              expression: "%Patient.name.family.first()"
+        initialExpression:
+          language: text/fhirpath
+          expression: "%Patient.name.family.first()"
 
       - linkId: iA1d
         text: "d. Title:"
         type: string
         required: false
         maxLength: 10
-        extension:
-          - url: http://hl7.org/fhir/StructureDefinition/entryFormat
-            value:
-              string: "Jr./Sr."
-          - url: >-
-              http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression
-            valueExpression:
-              language: text/fhirpath
-              expression: "%Patient.name.prefix.first()"
+        entryFormat: "Jr./Sr."
+        initialExpression:
+          language: text/fhirpath
+          expression: "%Patient.name.prefix.first()"
 
   - linkId: iA2
     text: 2. Sex / Gender identity
@@ -84,15 +63,12 @@ item:
         text: "a. Sex:"
         type: choice
         required: true
-        extension:
-          - url: >-
-              http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression
-            valueExpression:
-              language: text/fhirpath
-              expression: |-
-                %Questionnaire.repeat(item).where(linkId='gender').answerOption.valueCoding.where(
-                  code=iif(%Patient.gender='male' or %Patient.gender='female', %Patient.gender, 'other')
-                )
+        initialExpression:
+          language: text/fhirpath
+          expression: |-
+            %Questionnaire.repeat(item).where(linkId='iA2c').answerOption.valueCoding.where(
+              code=iif(%Patient.gender='male' or %Patient.gender='female', %Patient.gender, 'other')
+            )
         answerOption:
           - value:
               Coding:
@@ -116,12 +92,9 @@ item:
         itemControl:
           coding:
             - code: inline-choice
-        extension:
-          - url: >-
-              http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression
-            valueExpression:
-              language: text/fhirpath
-              expression: "%Patient.extension('http://hl7.org/fhir/StructureDefinition/individual-genderIdentity').extension('value').valueCodeableConcept.coding.first()"
+        initialExpression:
+          language: text/fhirpath
+          expression: "%Patient.extension('http://hl7.org/fhir/StructureDefinition/individual-genderIdentity').extension('value').valueCodeableConcept.coding.first()"
         answerOption:
           - value:
               Coding:
@@ -153,15 +126,10 @@ item:
         text: "c. Person self-idenifies gender as:"
         type: string
         maxLength: 15
-        extension:
-          - url: http://hl7.org/fhir/StructureDefinition/entryFormat
-            value:
-              string: "Enter up to 15 characters"
-          - url: >-
-              http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression
-            valueExpression:
-              language: text/fhirpath
-              expression: "%Patient.extension('http://hl7.org/fhir/StructureDefinition/individual-genderIdentity').extension('value').valueCodeableConcept.text"
+        entryFormat: "Enter up to 15 characters"
+        initialExpression:
+          language: text/fhirpath
+          expression: "%Patient.extension('http://hl7.org/fhir/StructureDefinition/individual-genderIdentity').extension('value').valueCodeableConcept.text"
         enableWhen:
           - question: iA2d
             operator: "="
@@ -179,15 +147,10 @@ item:
       - linkId: iA3
         type: date
         required: true
-        extension:
-          - url: http://hl7.org/fhir/StructureDefinition/entryFormat
-            value:
-              string: "Select birthdate"
-          - url: >-
-              http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression
-            valueExpression:
-              language: text/fhirpath
-              expression: "%Patient.birthDate"
+        entryFormat: "Select birthdate"
+        initialExpression:
+          language: text/fhirpath
+          expression: "%Patient.birthDate"
   
   - linkId: iA4-group
     text: 4. Marital status
@@ -195,15 +158,10 @@ item:
     item:
       - linkId: iA4
         type: choice
-        extension:
-          - url: http://hl7.org/fhir/StructureDefinition/entryFormat
-            value:
-              string: "Select marital status"
-          - url: >-
-              http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression
-            valueExpression:
-              language: text/fhirpath
-              expression: "%Patient.maritalStatus.coding.first()"
+        entryFormat: "Select marital status"
+        initialExpression:
+          language: text/fhirpath
+          expression: "%Patient.maritalStatus.coding.first()"
         answerOption:
           - value:
               Coding:
@@ -243,15 +201,10 @@ item:
       - linkId: iA45
         text: "a. Country of birth:"
         type: string
-        extension:
-          - url: http://hl7.org/fhir/StructureDefinition/entryFormat
-            value:
-              string: "Specify"
-          - url: >-
-              http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression
-            valueExpression:
-              language: text/fhirpath
-              expression: "%Patient.extension('http://hl7.org/fhir/StructureDefinition/patient-birthPlace').valueAddress.text"        
+        entryFormat: "Specify"
+        initialExpression:
+          language: text/fhirpath
+          expression: "%Patient.extension('http://hl7.org/fhir/StructureDefinition/patient-birthPlace').valueAddress.text"        
       
       - linkId: iB3k
         text: "b. Indigenous status:"
@@ -260,10 +213,7 @@ item:
         itemControl:
           coding:
             - code: inline-choice
-        extension:
-          - url: >-
-              http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression
-            valueExpression:
+        initialExpression:
               language: text/fhirpath
               expression: "%Patient.extension('http://hl7.org.au/fhir/StructureDefinition/indigenous-status').valueCoding"
         answerOption:
