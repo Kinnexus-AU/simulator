@@ -70,21 +70,18 @@ item:
               code=iif(%Patient.gender='male' or %Patient.gender='female', %Patient.gender, 'other')
             )
         answerOption:
-          - value:
-              Coding:
-                code: "male"
-                system: http://hl7.org/fhir/administrative-gender
-                display: Male
-          - value:
-              Coding:
-                code: "female"
-                system: http://hl7.org/fhir/administrative-gender
-                display: Female
-          - value:
-              Coding:
-                code: "other"
-                system: http://hl7.org/fhir/administrative-gender
-                display: Not assigned male or female
+          - valueCoding:
+              code: "male"
+              system: http://hl7.org/fhir/administrative-gender
+              display: Male
+          - valueCoding:
+              code: "female"
+              system: http://hl7.org/fhir/administrative-gender
+              display: Female
+          - valueCoding:
+              code: "other"
+              system: http://hl7.org/fhir/administrative-gender
+              display: Not assigned male or female
 
       - linkId: iA2d
         text: "b. Gender Idenity:"
@@ -96,31 +93,26 @@ item:
           language: text/fhirpath
           expression: "%Patient.extension('http://hl7.org/fhir/StructureDefinition/individual-genderIdentity').extension('value').valueCodeableConcept.coding.first()"
         answerOption:
-          - value:
-              Coding:
-                code: '446151000124109'
-                system: http://snomed.info/sct
-                display: Male
-          - value:
-              Coding:
-                code: '446141000124107'
-                system: http://snomed.info/sct
-                display: Female
-          - value:
-              Coding:
-                code: '33791000087105'
-                system: http://snomed.info/sct
-                display: Other gender identity
-          - value:
-              Coding:
-                code: 'UNK'
-                system: http://terminology.hl7.org/CodeSystem/v3-NullFlavor
-                display: Not known
-          - value:
-              Coding:
-                code: 'asked-declined'
-                system: http://terminology.hl7.org/CodeSystem/data-absent-reason
-                display: Not applicable
+          - valueCoding:
+              code: '446151000124109'
+              system: http://snomed.info/sct
+              display: Male
+          - valueCoding:
+              code: '446141000124107'
+              system: http://snomed.info/sct
+              display: Female
+          - valueCoding:
+              code: '33791000087105'
+              system: http://snomed.info/sct
+              display: Other gender identity
+          - valueCoding:
+              code: 'UNK'
+              system: http://terminology.hl7.org/CodeSystem/v3-NullFlavor
+              display: Not known
+          - valueCoding:
+              code: 'asked-declined'
+              system: http://terminology.hl7.org/CodeSystem/data-absent-reason
+              display: Not applicable
 
       - linkId: iA2e
         text: "c. Person self-idenifies gender as:"
@@ -133,11 +125,10 @@ item:
         enableWhen:
           - question: iA2d
             operator: "="
-            answer:
-              Coding:
-                code: "33791000087105"
-                system: http://snomed.info/sct
-                display: Other gender identity
+            answerCoding:
+              code: "33791000087105"
+              system: http://snomed.info/sct
+              display: Other gender identity
 
 
   - linkId: iA3-group
@@ -163,36 +154,30 @@ item:
           language: text/fhirpath
           expression: "%Patient.maritalStatus.coding.first()"
         answerOption:
-          - value:
-              Coding:
-                code: 'S'
-                system: http://terminology.hl7.org/CodeSystem/v3-MaritalStatus
-                display: 1. Never married
-          - value:
-              Coding:
-                code: 'M'
-                system: http://terminology.hl7.org/CodeSystem/v3-MaritalStatus
-                display: 2. Married
-          - value:
-              Coding:
-                code: 'T'
-                system: http://terminology.hl7.org/CodeSystem/v3-MaritalStatus
-                display: 3. Domestic partner
-          - value:
-              Coding:
-                code: 'W'
-                system: http://terminology.hl7.org/CodeSystem/v3-MaritalStatus
-                display: 4. Widowed
-          - value:
-              Coding:
-                code: 'L'
-                system: http://terminology.hl7.org/CodeSystem/v3-MaritalStatus
-                display: 5. Legally separated
-          - value:
-              Coding:
-                code: 'D'
-                system: http://terminology.hl7.org/CodeSystem/v3-MaritalStatus
-                display: 6. Divorced
+          - valueCoding:
+              code: 'S'
+              system: http://terminology.hl7.org/CodeSystem/v3-MaritalStatus
+              display: 1. Never married
+          - valueCoding:
+              code: 'M'
+              system: http://terminology.hl7.org/CodeSystem/v3-MaritalStatus
+              display: 2. Married
+          - valueCoding:
+              code: 'T'
+              system: http://terminology.hl7.org/CodeSystem/v3-MaritalStatus
+              display: 3. Domestic partner
+          - valueCoding:
+              code: 'W'
+              system: http://terminology.hl7.org/CodeSystem/v3-MaritalStatus
+              display: 4. Widowed
+          - valueCoding:
+              code: 'L'
+              system: http://terminology.hl7.org/CodeSystem/v3-MaritalStatus
+              display: 5. Legally separated
+          - valueCoding:
+              code: 'D'
+              system: http://terminology.hl7.org/CodeSystem/v3-MaritalStatus
+              display: 6. Divorced
 
   - linkId: iB3
     text: 5. Ethnicity and race
@@ -217,26 +202,22 @@ item:
               language: text/fhirpath
               expression: "%Patient.extension('http://hl7.org.au/fhir/StructureDefinition/indigenous-status').valueCoding"
         answerOption:
-          - value:
-              Coding:
-                code: '1'
-                system: https://healthterminologies.gov.au/fhir/CodeSystem/australian-indigenous-status-1
-                display: 1. Yes, Aboriginal
-          - value:
-              Coding:
-                code: '2'
-                system: https://healthterminologies.gov.au/fhir/CodeSystem/australian-indigenous-status-1
-                display: 2. Yes, Torres Strait Islander
-          - value:
-              Coding:
-                code: '3'
-                system: https://healthterminologies.gov.au/fhir/CodeSystem/australian-indigenous-status-1
-                display: 3. Yes, both
-          - value:
-              Coding:
-                code: '4'
-                system: https://healthterminologies.gov.au/fhir/CodeSystem/australian-indigenous-status-1
-                display: 4. No, neither
+          - valueCoding:
+              code: '1'
+              system: https://healthterminologies.gov.au/fhir/CodeSystem/australian-indigenous-status-1
+              display: 1. Yes, Aboriginal
+          - valueCoding:
+              code: '2'
+              system: https://healthterminologies.gov.au/fhir/CodeSystem/australian-indigenous-status-1
+              display: 2. Yes, Torres Strait Islander
+          - valueCoding:
+              code: '3'
+              system: https://healthterminologies.gov.au/fhir/CodeSystem/australian-indigenous-status-1
+              display: 3. Yes, both
+          - valueCoding:
+              code: '4'
+              system: https://healthterminologies.gov.au/fhir/CodeSystem/australian-indigenous-status-1
+              display: 4. No, neither
 
 resourceType: Questionnaire
 title: Patient
