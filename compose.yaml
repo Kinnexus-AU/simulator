@@ -52,6 +52,11 @@ services:
       - export
       - --output
       - /app/resources/initBundle.json
+      - --external-questionnaire-fce-fhir-converter-url
+      - http://questionnaire-fce-fhir-converter:3000/to-fhir
+    depends_on:
+      questionnaire-fce-fhir-converter:
+        condition: service_healthy
     volumes:
       - ./resources/seeds:/app/resources
     env_file:
@@ -62,7 +67,19 @@ services:
       - watch
       - --external-fhir-server-url
       - http://root:secret@aidbox:8080
+      - --external-questionnaire-fce-fhir-converter-url
+      - http://questionnaire-fce-fhir-converter:3000/to-fhir
     volumes:
       - ./resources/seeds:/app/resources
     env_file:
       - env/seeds
+    depends_on:
+      questionnaire-fce-fhir-converter:
+        condition: service_healthy
+  questionnaire-fce-fhir-converter:
+    image: bedasoftware/questionnaire-fce-fhir-converter:latest
+    healthcheck:
+      test: curl --fail http://localhost:3000/health || exit 1
+      interval: 5s
+      timeout: 30s
+      retries: 50
