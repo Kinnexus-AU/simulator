@@ -33,8 +33,8 @@ spec:
       BOX_FHIR_CREATEDAT_URL: https://aidbox.app/ex/createdAt
       BOX_BOOTSTRAP_FHIR_PACKAGES: "hl7.fhir.r4.core#4.0.1"
       BOX_FHIR_SCHEMA_VALIDATION: true
-      #BOX_FHIR_TERMINOLOGY_SERVICE_BASE_URL: "https://tx.dev.hl7.org.au/fhir"
-      BOX_FHIR_TERMINOLOGY_SERVICE_BASE_URL: https://tx.health-samurai.io/fhir
+      BOX_FHIR_TERMINOLOGY_SERVICE_BASE_URL: "https://tx.dev.hl7.org.au/fhir"
+      #BOX_FHIR_TERMINOLOGY_SERVICE_BASE_URL: https://tx.health-samurai.io/fhir
       BOX_FEATURES_ORGBAC_ENABLE: false
       BOX_FHIR_COMPLIANT_MODE: true
       BOX_FHIR_SEARCH_DEFAULT_PARAMS_TOTAL: accurate
