@@ -24,8 +24,9 @@ body:
         gender: "{{ %gender.code }}"
         birthDate: "{{ %birthDate }}"
         identifier:
-          - system: test
-            value: test
+          - extension:
+              url: http://hl7.org/fhir/StructureDefinition/data-absent-reason
+              valueCode: not-asked
         extension:
           - "{% if %genderIdentity.exists() %}":
               - url: "http://hl7.org/fhir/StructureDefinition/individual-genderIdentity"
