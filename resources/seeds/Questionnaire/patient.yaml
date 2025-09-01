@@ -40,7 +40,7 @@ item:
         text: "c. Last:"
         type: string
         required: true
-        extension:
+        entryFormat: "Enter last name"
         initialExpression:
           language: text/fhirpath
           expression: "%Patient.name.family.first()"
