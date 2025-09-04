@@ -81,6 +81,7 @@ spec:
     - name: interpolate-init-bundle
       image: ghcr.io/kinnexus-au/simulator-seeds
       command:
+      - /app/entrypoint.sh
       - export
       - --output
       - /data/initBundle.json
