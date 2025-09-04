@@ -80,6 +80,12 @@ spec:
         mountPath: /dest
     - name: interpolate-init-bundle
       image: ghcr.io/kinnexus-au/simulator-seeds
+      command:
+      - export
+      - --output
+      - /data/initBundle.json
+      - --external-questionnaire-fce-fhir-converter-url
+      - http://questionnaire-converter:3000/to-fhir
       envFrom:
       - secretRef:
           name: aidbox-simulator-auth
