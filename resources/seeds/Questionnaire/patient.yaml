@@ -1,7 +1,24 @@
+resourceType: Questionnaire
+title: Patient
+extension:
+  - url: >-
+      http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-launchContext
+    extension:
+      - url: name
+        valueCoding:
+          code: Patient
+      - url: type
+        valueCode: Patient
+  - url: https://emr-core.beda.software/StructureDefinition/questionnaire-mapper
+    valueReference:
+      reference: Mapping/patient
+status: active
+id: patient
+url: patient
+name: patient
 meta:
   profile:
     - https://emr-core.beda.software/StructureDefinition/fhir-emr-questionnaire
-name: patient
 item:
   - linkId: patient-id
     text: PatientId
@@ -12,11 +29,14 @@ item:
       language: text/fhirpath
       expression: "%Patient.id"
 
-  - linkId: iA1
+  - linkId: patient-info-group
     text: 1. Name
     type: group
     item:
-      - linkId: iA1a
+      - linkId: first-name
+        code:
+          - system: https://interrai.org/
+            code: iA1a
         text: "a. First:"
         type: string
         required: true
@@ -26,7 +46,10 @@ item:
           language: text/fhirpath
           expression: "%Patient.name.given[0]"
 
-      - linkId: iA1b
+      - linkId: middle-name
+        code:
+          - system: https://interrai.org/
+            code: iA1b
         text: "b. Middle:"
         type: string
         required: false
@@ -36,7 +59,10 @@ item:
           language: text/fhirpath
           expression: "%Patient.name.given[1]"
 
-      - linkId: iA1c
+      - linkId: last-name
+        code:
+          - system: https://interrai.org/
+            code: iA1c
         text: "c. Last:"
         type: string
         required: true
@@ -45,7 +71,10 @@ item:
           language: text/fhirpath
           expression: "%Patient.name.family.first()"
 
-      - linkId: iA1d
+      - linkId: title
+        code:
+          - system: https://interrai.org/
+            code: iA1d
         text: "d. Title:"
         type: string
         required: false
@@ -55,18 +84,24 @@ item:
           language: text/fhirpath
           expression: "%Patient.name.prefix.first()"
 
-  - linkId: iA2
+  - linkId: sex-group
+    code:
+      - system: https://interrai.org/
+        code: iA2
     text: 2. Sex / Gender identity
     type: group
     item:
-      - linkId: iA2c
+      - linkId: sex
+        code:
+          - system: https://interrai.org/
+            code: iA2c
         text: "a. Sex:"
         type: choice
         required: true
         initialExpression:
           language: text/fhirpath
           expression: |-
-            %Questionnaire.repeat(item).where(linkId='iA2c').answerOption.valueCoding.where(
+            %Questionnaire.repeat(item).where(linkId='sex').answerOption.valueCoding.where(
               code=iif(%Patient.gender='male' or %Patient.gender='female', %Patient.gender, 'other')
             )
         answerOption:
@@ -83,7 +118,7 @@ item:
               system: http://hl7.org/fhir/administrative-gender
               display: Not assigned male or female
 
-      - linkId: iA2d
+      - linkId: gender-identity
         text: "b. Gender Idenity:"
         type: choice
         itemControl:
@@ -114,28 +149,27 @@ item:
               system: http://terminology.hl7.org/CodeSystem/data-absent-reason
               display: Not applicable
 
-      - linkId: iA2e
+      - linkId: self-identified-gender
         text: "c. Person self-idenifies gender as:"
         type: string
         maxLength: 15
         entryFormat: "Enter up to 15 characters"
         initialExpression:
           language: text/fhirpath
-          expression: "%Patient.extension('http://hl7.org/fhir/StructureDefinition/individual-genderIdentity').extension('value').valueCodeableConcept.text"
+          expression: "%Patient.extension('http://hl7.org/fhir/StructureDefinition/individual-genderIdentity').extension('comment').valueString"
         enableWhen:
-          - question: iA2d
+          - question: gender-identity
             operator: "="
             answerCoding:
               code: "33791000087105"
               system: http://snomed.info/sct
               display: Other gender identity
 
-
-  - linkId: iA3-group
+  - linkId: birthdate-group
     text: 3. Birthdate
     type: group
     item:
-      - linkId: iA3
+      - linkId: birthdate
         type: date
         required: true
         entryFormat: "Select birthdate"
@@ -143,11 +177,11 @@ item:
           language: text/fhirpath
           expression: "%Patient.birthDate"
   
-  - linkId: iA4-group
+  - linkId: marital-status-group
     text: 4. Marital status
     type: group
     item:
-      - linkId: iA4
+      - linkId: marital-status
         type: choice
         entryFormat: "Select marital status"
         initialExpression:
@@ -179,11 +213,17 @@ item:
               system: http://terminology.hl7.org/CodeSystem/v3-MaritalStatus
               display: 6. Divorced
 
-  - linkId: iB3
+  - linkId: ethnicity-race-group
+    code:
+      - system: https://interrai.org/
+        code: iB3  
     text: 5. Ethnicity and race
     type: group
     item:
-      - linkId: iA45
+      - linkId: country-of-birth
+        code:
+        - system: https://interrai.org/
+          code: iA45     
         text: "a. Country of birth:"
         type: string
         entryFormat: "Specify"
@@ -191,9 +231,12 @@ item:
           language: text/fhirpath
           expression: "%Patient.extension('http://hl7.org/fhir/StructureDefinition/patient-birthPlace').valueAddress.text"        
       
-      - linkId: iB3k
+      - linkId: indigenous-status
+        code:
+          - system: https://interrai.org/
+            code: iB3k      
         text: "b. Indigenous status:"
-        helpText: Is the client of Aboriginal or Torres Strait Islander origin? # TOFO: Add new view for this question
+        helpText: Is the client of Aboriginal or Torres Strait Islander origin?
         type: choice
         itemControl:
           coding:
@@ -219,20 +262,32 @@ item:
               system: https://healthterminologies.gov.au/fhir/CodeSystem/australian-indigenous-status-1
               display: 4. No, neither
 
-resourceType: Questionnaire
-title: Patient
-extension:
-  - url: >-
-      http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-launchContext
-    extension:
-      - url: name
-        valueCoding:
-          code: Patient
-      - url: type
-        valueCode: Patient
-  - url: https://emr-core.beda.software/StructureDefinition/questionnaire-mapper
-    valueReference:
-      reference: Mapping/patient
-status: active
-id: patient
-url: patient
+  - linkId: medicare-number-group
+    text: 6. Medicare number
+    type: group
+    item:
+      - linkId: medicare-number
+        type: string
+        required: true       
+        initialExpression:
+          language: text/fhirpath
+          expression: |-
+            %Patient.identifier.where(system='http://ns.electronichealth.net.au/id/medicare-number').value
+        extension:
+          - url: http://hl7.org/fhir/StructureDefinition/entryFormat
+            valueString: 0000-0000-0
+
+  - linkId: patient-record-number-group
+    text: 7. Patient record or UR Number
+    type: group
+    item:
+      - linkId: patient-record-number
+        type: string
+        required: true        
+        initialExpression:
+          language: text/fhirpath
+          expression: |-
+            %Patient.identifier.where(system='http://www.acme.com/identifiers/patient').value
+        extension:
+          - url: http://hl7.org/fhir/StructureDefinition/entryFormat
+            valueString: e.g. UR12345678
