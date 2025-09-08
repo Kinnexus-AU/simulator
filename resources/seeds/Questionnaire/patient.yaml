@@ -30,6 +30,9 @@ item:
       expression: "%Patient.id"
 
   - linkId: patient-info-group
+    code:
+      - system: https://interrai.org/
+        code: iA1
     text: 1. Name
     type: group
     item:
@@ -84,14 +87,14 @@ item:
           language: text/fhirpath
           expression: "%Patient.name.prefix.first()"
 
-  - linkId: sex-group
+  - linkId: gender-group
     code:
       - system: https://interrai.org/
         code: iA2
     text: 2. Sex / Gender identity
     type: group
     item:
-      - linkId: sex
+      - linkId: gender
         code:
           - system: https://interrai.org/
             code: iA2c
@@ -101,7 +104,7 @@ item:
         initialExpression:
           language: text/fhirpath
           expression: |-
-            %Questionnaire.repeat(item).where(linkId='sex').answerOption.valueCoding.where(
+            %Questionnaire.repeat(item).where(linkId='gender').answerOption.valueCoding.where(
               code=iif(%Patient.gender='male' or %Patient.gender='female', %Patient.gender, 'other')
             )
         answerOption:
@@ -220,7 +223,7 @@ item:
     text: 5. Ethnicity and race
     type: group
     item:
-      - linkId: country-of-birth
+      - linkId: birth-place
         code:
         - system: https://interrai.org/
           code: iA45     
@@ -243,7 +246,12 @@ item:
             - code: inline-choice
         initialExpression:
               language: text/fhirpath
-              expression: "%Patient.extension('http://hl7.org.au/fhir/StructureDefinition/indigenous-status').valueCoding"
+              expression: |
+                %Questionnaire.repeat(item).where(
+                  linkId='indigenous-status'
+                ).answerOption.valueCoding.where(
+                  code=%Patient.extension('http://hl7.org.au/fhir/StructureDefinition/indigenous-status').valueCoding.code
+                )
         answerOption:
           - valueCoding:
               code: '1'
