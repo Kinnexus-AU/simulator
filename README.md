@@ -174,5 +174,16 @@ Make sure to add  `type` when for your import
 
 ```js
 import type { Dashboard } from '@beda.software/emr/dist/components/Dashboard/types';
+```
 
+## Deploy
+To deploy a new version of the applicaiton you need:
+1. Create a tag and push it to the repository
+2. Check that github actions passed and new tag availbe in the package registires:   
+https://github.com/Kinnexus-AU/simulator/pkgs/container/simulator  
+https://github.com/Kinnexus-AU/simulator/pkgs/container/simulator-seeds  
+3. Update tags in kustomize manifests:  
+https://github.com/Kinnexus-AU/simulator/blob/main/infra/kustomize/emr.yaml#L31
+https://github.com/Kinnexus-AU/simulator/blob/main/infra/kustomize/aidbox.yaml#L82
+4. Fluxcd will pull these changes in a few minutes and deploy them automatically.
 
