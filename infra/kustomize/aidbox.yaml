@@ -48,6 +48,8 @@ spec:
       - aidbox-simulator-database
     extraEnvFromConfigMaps:
       - aidbox-simulator-database
+    serviceAccount:
+      name: simulator-aidbox
     volumes:
       - name: postgres-cert-source
         secret:
