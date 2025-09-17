@@ -18,7 +18,7 @@ export function getANTDTheme({ dark }: { dark?: boolean }): ThemeConfig {
             colorSuccess: palette.success,
             colorWarning: palette.warning,
             colorInfo: palette.primaryPalette.bcp_6,
-            borderRadius: 100,
+            borderRadius: 24,
             fontFamily: `'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
   'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
   'Noto Color Emoji'`,
