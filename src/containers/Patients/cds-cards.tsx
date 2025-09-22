@@ -4,6 +4,7 @@ import { sharedAuthorizedPractitioner } from "@beda.software/emr/sharedState";
 import { useService, RenderRemoteData } from '@beda.software/fhir-react';
 import { Patient } from "fhir/r4b";
 import { v4 as uuidv4 } from 'uuid';
+import { Card, Tag, Typography } from 'antd';
 
 
 const CDSBaseUrl = 'http://localhost:8000/';
@@ -20,13 +21,13 @@ export function CDSCards({ patient }: ContainerProps) {
     return (
         <RenderRemoteData remoteData={services}>
             {
-                (data) => <>{data.map(hook=> <CDSCard key={hook.id} hook={hook} patient={patient} />)}</>
+                (data) => <>{data.map(hook=> <ClinicalDecisionSupportServiceCard key={hook.id} hook={hook} patient={patient} />)}</>
             }
         </RenderRemoteData>
     );
 }
 
-interface CDSCardProps {
+interface ClinicalDecisionSupportServiceCardProps {
     hook: CDSHook,
     patient: Patient
 }
@@ -38,7 +39,7 @@ interface CDSResponse {
     indicator: string,
 }
 
-function CDSCard({ hook, patient }: CDSCardProps) {
+function ClinicalDecisionSupportServiceCard({ hook, patient }: ClinicalDecisionSupportServiceCardProps) {
     const [services] = useService(() => service<{ cards: Array<CDSResponse> }>({
         baseURL: CDSBaseUrl,
         url: `cds-services/${hook.id}`,
@@ -59,12 +60,44 @@ function CDSCard({ hook, patient }: CDSCardProps) {
             renderFailure={(error) => <pre>{JSON.stringify(error, undefined, 4)}</pre>}
         >
             {
-                (data) => <>{data.cards.map(c => <Card key={c.uuid} card={c} />)}</>
+                (data) => <>{data.cards.map(c => <ClinicalDecisionSupportCard key={c.uuid} card={c} />)}</>
             }
         </RenderRemoteData>
     );
 }
 
-function Card({ card }: { card: CDSResponse }) {
-    return <pre>{JSON.stringify(card, undefined, 4)}</pre>
+function ClinicalDecisionSupportCard({ card }: { card: CDSResponse }) {
+    const getIndicatorColor = (indicator: string) => {
+        switch (indicator.toLowerCase()) {
+            case 'info':
+                return 'blue';
+            case 'warning':
+                return 'orange';
+            case 'critical':
+                return 'red';
+            case 'success':
+                return 'green';
+            default:
+                return 'default';
+        }
+    };
+
+    return (
+        <Card
+            title={
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Typography.Text strong>{card.summary}</Typography.Text>
+                    <Tag color={getIndicatorColor(card.indicator)}>
+                        {card.indicator.toUpperCase()}
+                    </Tag>
+                </div>
+            }
+            style={{ marginBottom: '16px' }}
+            size="small"
+        >
+            <Typography.Paragraph style={{ margin: 0 }}>
+                {card.detail}
+            </Typography.Paragraph>
+        </Card>
+    );
 }
