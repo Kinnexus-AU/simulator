@@ -16,11 +16,11 @@ interface CDSHook {
 };
 
 export function CDSCards({ patient }: ContainerProps) {
-    const [services] = useService(() => service<Array<CDSHook>>({ baseURL: config.CDSBaseUrl, url: 'cds-services' }));
+    const [services] = useService(() => service<{services: Array<CDSHook>}>({ baseURL: config.CDSBaseUrl, url: 'cds-services' }));
     return (
         <RenderRemoteData remoteData={services}>
             {
-                (data) => <>{data.map(hook=> <ClinicalDecisionSupportServiceCard key={hook.id} hook={hook} patient={patient} />)}</>
+                (data) => <>{data.services.map(hook=> <ClinicalDecisionSupportServiceCard key={hook.id} hook={hook} patient={patient} />)}</>
             }
         </RenderRemoteData>
     );
