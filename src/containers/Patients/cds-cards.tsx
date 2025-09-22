@@ -5,9 +5,8 @@ import { useService, RenderRemoteData } from '@beda.software/fhir-react';
 import { Patient } from "fhir/r4b";
 import { v4 as uuidv4 } from 'uuid';
 import { Card, Tag, Typography } from 'antd';
+import config from "@beda.software/emr-config";
 
-
-const CDSBaseUrl = 'http://localhost:8000/';
 interface CDSHook {
     hook: string,
     title: string,
@@ -17,7 +16,7 @@ interface CDSHook {
 };
 
 export function CDSCards({ patient }: ContainerProps) {
-    const [services] = useService(() => service<Array<CDSHook>>({ baseURL: CDSBaseUrl, url: 'cds-services' }));
+    const [services] = useService(() => service<Array<CDSHook>>({ baseURL: config.CDSBaseUrl, url: 'cds-services' }));
     return (
         <RenderRemoteData remoteData={services}>
             {
@@ -41,7 +40,7 @@ interface CDSResponse {
 
 function ClinicalDecisionSupportServiceCard({ hook, patient }: ClinicalDecisionSupportServiceCardProps) {
     const [services] = useService(() => service<{ cards: Array<CDSResponse> }>({
-        baseURL: CDSBaseUrl,
+        baseURL: config.CDSBaseUrl,
         url: `cds-services/${hook.id}`,
         method: 'POST',
         data: {
