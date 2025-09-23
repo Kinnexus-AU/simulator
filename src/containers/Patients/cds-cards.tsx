@@ -46,7 +46,7 @@ interface CDSResponse {
     summary: string,
     detail: string,
     indicator: string,
-    links: Array<CDSLink>
+    links?: Array<CDSLink>
 }
 
 function ClinicalDecisionSupportServiceCard({ hook, patient }: ClinicalDecisionSupportServiceCardProps) {
@@ -108,7 +108,7 @@ function ClinicalDecisionSupportCard({ card, patient }: { card: CDSResponse, pat
             <Typography.Paragraph style={{ margin: 0 }}>
                 {card.detail}
                 <br/>
-                <>{card.links.filter(({type}) => type === 'smart').map(l => <CDSSmartLaunch key={l.url} patient={patient} link={l}/>)}</>
+                <>{card.links?.filter(({type}) => type === 'smart').map(l => <CDSSmartLaunch key={l.url} patient={patient} link={l}/>)}</>
             </Typography.Paragraph>
         </Card>
     );
