@@ -1,0 +1,135 @@
+id: encounter-discharge
+resourceType: Questionnaire
+meta:
+  profile:
+    - https://emr-core.beda.software/StructureDefinition/fhir-emr-questionnaire
+name: encounter-discharge
+title: Encounter discharge
+status: active
+subjectType:
+  - Patient
+launchContext:
+  - name:
+      code: Patient
+    type:
+      - Patient
+mapping:
+  - reference: Mapping/encounter-discharge-extract
+
+item:
+  - linkId: encounter
+    text: Encounter
+    type: reference
+    required: true
+    referenceResource:
+      - Encounter
+    entryFormat: Select encounter
+    answerExpression:
+      language: application/x-fhir-query
+      expression: "Encounter?status=in-progress&patient={{ %Patient.id }}"
+    choiceColumn:
+      - forDisplay: true
+        path: >-
+          period.start
+
+  - linkId: discharge-disposition
+    text: Residential / living status after discharge
+    type: choice
+    required: true
+    entryFormat: Select residential / living status after discharge
+    answerOption:
+      - valueCoding:
+          code: "1"
+          system: "https://interrai.org/iCode"
+          display: Private residence — owned / purchasing
+      - valueCoding:
+          code: "2"
+          system: "https://interrai.org/iCode"
+          display: Private residence — private rental
+      - valueCoding:
+          code: "3"
+          system: "https://interrai.org/iCode"
+          display: Private residence — public rental or community housing; indigenous community / settlement
+      - valueCoding:
+          code: "4"
+          system: "https://interrai.org/iCode"
+          display: Independent living within a retirement village
+      - valueCoding:
+          code: "5"
+          system: "https://interrai.org/iCode"
+          display: Boarding house / rooming house / private hostel
+      - valueCoding:
+          code: "6"
+          system: "https://interrai.org/iCode"
+          display: Supported community accommodation
+      - valueCoding:
+          code: "7"
+          system: "https://interrai.org/iCode"
+          display: Short-term crisis, emergency, or transitional accommodation
+      - valueCoding:
+          code: "8"
+          system: "https://interrai.org/iCode"
+          display: Mental health residence — e.g., psychiatric group home
+      - valueCoding:
+          code: "9"
+          system: "https://interrai.org/iCode"
+          display: Group home for persons with physical disability
+      - valueCoding:
+          code: "10"
+          system: "https://interrai.org/iCode"
+          display: Setting for persons with intellectual disability
+      - valueCoding:
+          code: "11"
+          system: "https://interrai.org/iCode"
+          display: Residential aged care service — low-level care
+      - valueCoding:
+          code: "12"
+          system: "https://interrai.org/iCode"
+          display: Residential aged care service — high-level care
+      - valueCoding:
+          code: "13"
+          system: "https://interrai.org/iCode"
+          display: Acute care hospital
+      - valueCoding:
+          code: "14"
+          system: "https://interrai.org/iCode"
+          display: Hospice facility / palliative care unit
+      - valueCoding:
+          code: "15"
+          system: "https://interrai.org/iCode"
+          display: Rehabilitation hospital / unit
+      - valueCoding:
+          code: "16"
+          system: "https://interrai.org/iCode"
+          display: Psychiatric hospital or unit
+      - valueCoding:
+          code: "17"
+          system: "https://interrai.org/iCode"
+          display: Correctional facility
+      - valueCoding:
+          code: "18"
+          system: "https://interrai.org/iCode"
+          display: Public place / temporary shelter
+      - valueCoding:
+          code: "19"
+          system: "https://interrai.org/iCode"
+          display: Other
+      - valueCoding:
+          code: "20"
+          system: "https://interrai.org/iCode"
+          display: Deceased
+
+  - linkId: discharge-notes
+    text: Notes
+    type: text
+    required: true
+    entryFormat: Enter any additional notes or comments here
+
+  - linkId: end-date
+    text: Discharge date
+    type: dateTime
+    required: true
+    initialExpression:
+      language: text/fhirpath
+      expression: "now()"
+

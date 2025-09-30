@@ -1,0 +1,30 @@
+id: encounter-create-extract
+type: FHIRPath
+resourceType: Mapping
+body:
+  resourceType: Bundle
+  "{% assign %}":
+    - patientId: "{{ %QuestionnaireResponse.answers('patient-id') }}"
+    - practitioner: "{{ %QuestionnaireResponse.answers('practitioner') }}"
+    - startDateTime: "{{ %QuestionnaireResponse.answers('start-date') }}"
+    - admittedFrom: "{{ %QuestionnaireResponse.answers('admitted-from') }}"
+    - encounterType: "{{ %QuestionnaireResponse.answers('encounter-type') }}"
+  type: transaction
+  entry:
+    - request:
+        url: /Encounter
+        method: POST
+      resource:
+        resourceType: Encounter
+        period:
+          start: "{{ %startDateTime }}"
+        status: in-progress
+        class: "{{ %encounterType }}"
+        hospitalization:
+          admitSource:
+            coding:
+              - "{{ %admittedFrom }}"
+        subject:
+          reference: "Patient/{{ %patientId }}"
+        participant:
+          - individual: "{{ %practitioner }}"
