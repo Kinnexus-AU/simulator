@@ -122,7 +122,6 @@ item:
   - linkId: discharge-notes
     text: Notes
     type: text
-    required: true
     entryFormat: Enter any additional notes or comments here
 
   - linkId: end-date
