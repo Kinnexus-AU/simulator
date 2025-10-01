@@ -1,0 +1,19 @@
+kind: gcp-pubsub-at-least-once
+meta:
+  profile:
+    - >-
+      http://aidbox.app/StructureDefinition/aidboxtopicdestination-gcp-pubsub-at-least-once
+topic: >-
+  http://aidbox.simulator.kinnexus.beda.software/FHIR/R5/SubscriptionTopic/Encounter-topic
+parameter:
+  - name: projectId
+    valueString: kinnexus-dev
+  - name: topicId
+    valueString: FHIR-SubscriptionTopic-Encounter
+  - name: timeout
+    valueUnsignedInt: 1000
+  - name: maxCount
+    valueUnsignedInt: 4
+  - name: bytesThreshold
+    valueUnsignedInt: 10000
+resourceType: AidboxTopicDestination
