@@ -1,0 +1,23 @@
+id: allergies-extract
+type: FHIRPath
+resourceType: Mapping
+body:
+  "{% assign %}":
+    - patientId: "{{ %QuestionnaireResponse.answers('patient-id') }}"
+    - dateTime: "{{ %QuestionnaireResponse.answers('date-time') }}"
+  resourceType: Bundle
+  type: transaction
+  entry:
+    - "{% for medicationAllergyGroup in %QuestionnaireResponse.item.where(linkId='medication-allergy') %}":
+        request:
+          url: /AllergyIntolerance
+          method: POST
+        resource:
+          resourceType: AllergyIntolerance
+          recordedDate: "{{ %dateTime }}"
+          patient:
+            reference: "Patient/{{ %patientId }}"
+          category:
+            - medication
+          code:
+            text: "{{ %medicationAllergyGroup.answers('medication-allergy-name') }}"

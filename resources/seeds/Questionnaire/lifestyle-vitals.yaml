@@ -1,0 +1,117 @@
+id: lifestyle-vitals
+name: lifestyle-vitals
+title: Lifestyle & Vitals
+resourceType: Questionnaire
+meta:
+  profile:
+    - https://emr-core.beda.software/StructureDefinition/fhir-emr-questionnaire
+status: active
+subjectType:
+  - Encounter
+  - Patient
+launchContext:
+  - name:
+      code: Patient
+    type:
+      - Patient
+mapping:
+  - reference: Mapping/lifestyle-vitals-extract
+item:
+  - linkId: patient-id
+    text: PatientId
+    type: string
+    hidden: true
+    initialExpression:
+      language: text/fhirpath
+      expression: "%Patient.id"
+
+  - linkId: date-time
+    text: Date
+    type: dateTime
+    hidden: true
+    initialExpression:
+      language: text/fhirpath
+      expression: "now()"
+
+  - linkId: smoking-status
+    text: Smoking status
+    type: choice
+    required: true
+    code:
+      - system: http://loinc.org
+        code: "72166-2"
+        display: "Tobacco smoking status"
+    itemControl:
+      coding:
+        - code: inline-choice
+    extension:
+      - url: http://hl7.org/fhir/StructureDefinition/entryFormat
+        valueString: Select smoking status
+    answerOption:
+      - valueCoding:
+          code: "0"
+          system: https://interrai.org/iCode
+          display: "No"
+      - valueCoding:
+          code: "1"
+          system: https://interrai.org/iCode
+          display: "Not in last 3 days but is usually a daily smoker"
+      - valueCoding:
+          code: "2"
+          system: https://interrai.org/iCode
+          display: "Yes"
+
+  - linkId: height
+    text: Height
+    type: quantity
+    required: true
+    code:
+      - system: http://loinc.org
+        code: "8302-2"
+        display: "Body height"
+    extension:
+      - url: http://hl7.org/fhir/StructureDefinition/entryFormat
+        valueString: Enter height in cm
+    unitOption:
+      - code: cm
+        display: cm
+        system: http://unitsofmeasure.org
+
+  - linkId: weight
+    text: Weight
+    type: quantity
+    required: true
+    code:
+      - system: http://loinc.org
+        code: "29463-7"
+        display: "Body weight"
+    extension:
+      - url: http://hl7.org/fhir/StructureDefinition/entryFormat
+        valueString: Enter weight in kg
+    unitOption:
+      - code: kg
+        display: kg
+        system: http://unitsofmeasure.org
+
+  - linkId: bmi
+    text: BMI
+    type: decimal
+    required: true
+    readOnly: true
+    unit:
+      code: kg/m2
+      system: http://unitsofmeasure.org
+      display: kg/m2
+    calculatedExpression:
+      language: text/fhirpath
+      expression: |
+        (
+          %QuestionnaireResponse.item.where(linkId='weight').answer.valueQuantity.value / 
+          (
+            (
+              %QuestionnaireResponse.item.where(linkId='height').answer.valueQuantity.value / 100
+            ) * (
+              %QuestionnaireResponse.item.where(linkId='height').answer.valueQuantity.value / 100
+            )
+          )
+        ).round(2)      
