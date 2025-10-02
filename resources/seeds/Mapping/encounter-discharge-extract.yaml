@@ -15,9 +15,6 @@ body:
         method: PATCH
       resource:
         resourceType: Encounter
-        meta:
-          profile:
-            - http://hl7.org.au/fhir/core/StructureDefinition/au-core-encounter
         period:
           end: "{{ %endDate }}"
         status: finished
