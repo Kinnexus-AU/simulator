@@ -38,36 +38,19 @@ item:
     type: choice
     required: true
     code:
-      - system: http://loinc.org
-        code: "72166-2"
+      - system: http://snomed.info/sct
+        code: "1747861000168109"
         display: "Tobacco smoking status"
-    itemControl:
-      coding:
-        - code: inline-choice
-    extension:
-      - url: http://hl7.org/fhir/StructureDefinition/entryFormat
-        valueString: Select smoking status
-    answerOption:
-      - valueCoding:
-          code: "0"
-          system: https://interrai.org/iCode
-          display: "No"
-      - valueCoding:
-          code: "1"
-          system: https://interrai.org/iCode
-          display: "Not in last 3 days but is usually a daily smoker"
-      - valueCoding:
-          code: "2"
-          system: https://interrai.org/iCode
-          display: "Yes"
+    entryFormat: Select smoking status
+    preferredTerminologyServer: https://tx.dev.hl7.org.au/fhir
+    answerValueSet: http://hl7.org/fhir/ValueSet/observation-status
 
   - linkId: height
     text: Height
     type: quantity
-    required: true
     code:
-      - system: http://loinc.org
-        code: "8302-2"
+      - system: http://snomed.info/sct
+        code: "50373000"
         display: "Body height"
     extension:
       - url: http://hl7.org/fhir/StructureDefinition/entryFormat
@@ -80,10 +63,9 @@ item:
   - linkId: weight
     text: Weight
     type: quantity
-    required: true
     code:
-      - system: http://loinc.org
-        code: "29463-7"
+      - system: http://snomed.info/sct
+        code: "27113001"
         display: "Body weight"
     extension:
       - url: http://hl7.org/fhir/StructureDefinition/entryFormat
@@ -91,27 +73,4 @@ item:
     unitOption:
       - code: kg
         display: kg
-        system: http://unitsofmeasure.org
-
-  - linkId: bmi
-    text: BMI
-    type: decimal
-    required: true
-    readOnly: true
-    unit:
-      code: kg/m2
-      system: http://unitsofmeasure.org
-      display: kg/m2
-    calculatedExpression:
-      language: text/fhirpath
-      expression: |
-        (
-          %QuestionnaireResponse.item.where(linkId='weight').answer.valueQuantity.value / 
-          (
-            (
-              %QuestionnaireResponse.item.where(linkId='height').answer.valueQuantity.value / 100
-            ) * (
-              %QuestionnaireResponse.item.where(linkId='height').answer.valueQuantity.value / 100
-            )
-          )
-        ).round(2)      
+        system: http://unitsofmeasure.org    

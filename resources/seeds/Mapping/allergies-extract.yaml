@@ -14,10 +14,14 @@ body:
           method: POST
         resource:
           resourceType: AllergyIntolerance
+          meta:
+            profile:
+              - http://hl7.org.au/fhir/core/StructureDefinition/au-core-allergyintolerance
           recordedDate: "{{ %dateTime }}"
           patient:
             reference: "Patient/{{ %patientId }}"
           category:
             - medication
           code:
-            text: "{{ %medicationAllergyGroup.answers('medication-allergy-name') }}"
+            coding:
+              - "{{ %medicationAllergyGroup.item.where(linkId='medication-allergy-name').answer.valueCoding }}"
