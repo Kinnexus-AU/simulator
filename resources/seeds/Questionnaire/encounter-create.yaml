@@ -24,18 +24,9 @@ item:
       language: text/fhirpath
       expression: "%Patient.id"
 
-  - linkId: patient-name
-    text: Patient name
-    type: string
-    readOnly: true
-    initialExpression:
-      language: text/fhirpath
-      expression: "%Patient.name.first().given.first() + ' ' + %Patient.name.first().family"
-
   - linkId: practitioner
     text: Treating doctor
     type: reference
-    required: true
     referenceResource:
       - Practitioner
     entryFormat: Select treating doctor
@@ -52,103 +43,19 @@ item:
     type: choice
     required: true
     entryFormat: Select encounter type
-    answerOption:
-        - valueCoding:
-            code: "AMB"
-            system: http://terminology.hl7.org.au/CodeSystem/v3-ActCode
-            display: Ambulatory
-        - valueCoding:
-            code: "EMER"
-            system: http://terminology.hl7.org.au/CodeSystem/v3-ActCode
-            display: Emergency
+    preferredTerminologyServer: https://tx.dev.hl7.org.au/fhir
+    answerValueSet: http://terminology.hl7.org.au/ValueSet/v3-ActEncounterCode-extended
 
   - linkId: admitted-from
     text: Source of admission
     type: choice
-    required: true
     entryFormat: Select source of admission
-    answerOption:
-      - valueCoding:
-          code: "1"
-          system: "https://interrai.org/iCode"
-          display: Private residence — owned / purchasing
-      - valueCoding:
-          code: "2"
-          system: "https://interrai.org/iCode"
-          display: Private residenc — private rental
-      - valueCoding:
-          code: "3"
-          system: "https://interrai.org/iCode"
-          display: Private residence — public rental or community housing; indigenous community / settlement
-      - valueCoding:
-          code: "4"
-          system: "https://interrai.org/iCode"
-          display: Independent living within a retirement village
-      - valueCoding:
-          code: "5"
-          system: "https://interrai.org/iCode"
-          display: Boarding house / rooming house / private hostel or supported community accommodation
-      - valueCoding:
-          code: "6"
-          system: "https://interrai.org/iCode"
-          display: Supported community accommodation
-      - valueCoding:
-          code: "7"
-          system: "https://interrai.org/iCode"
-          display: Short-term crisis, emergency, or transitional accommodation
-      - valueCoding:
-          code: "8"
-          system: "https://interrai.org/iCode"
-          display: Mental health residence — e.g., psychiatric group home
-      - valueCoding:
-          code: "9"
-          system: "https://interrai.org/iCode"
-          display: Group home for persons with physical disability
-      - valueCoding:
-          code: "10"
-          system: "https://interrai.org/iCode"
-          display: Setting for persons with intellectual disability
-      - valueCoding:
-          code: "11"
-          system: "https://interrai.org/iCode"
-          display: Residential aged care service-low-level care
-      - valueCoding:
-          code: "12"
-          system: "https://interrai.org/iCode"
-          display: Residential aged care service-high-level care
-      - valueCoding:
-          code: "13"
-          system: "https://interrai.org/iCode"
-          display: Acute care hospital
-      - valueCoding:
-          code: "14"
-          system: "https://interrai.org/iCode"
-          display: Hospice facility / palliative care unit
-      - valueCoding:
-          code: "15"
-          system: "https://interrai.org/iCode"
-          display: Rehabilitation hospital / unit
-      - valueCoding:
-          code: "16"
-          system: "https://interrai.org/iCode"
-          display: Psychiatric hospital or unit
-      - valueCoding:
-          code: "17"
-          system: "https://interrai.org/iCode"
-          display: Correctional facility
-      - valueCoding:
-          code: "18"
-          system: "https://interrai.org/iCode"
-          display: Public place / temporary shelter
-      - valueCoding:
-          code: "19"
-          system: "https://interrai.org/iCode"
-          display: Other
+    preferredTerminologyServer: https://tx.dev.hl7.org.au/fhir
+    answerValueSet: http://hl7.org/fhir/ValueSet/encounter-admit-source
 
   - linkId: start-date
     text: Date
     type: dateTime
-    required: true
     initialExpression:
       language: text/fhirpath
       expression: "now()"
