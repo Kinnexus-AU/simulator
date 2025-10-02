@@ -21,5 +21,5 @@ body:
           vaccineCode:
             coding:
               - "{{ %immunizationGroup.item.where(linkId='vaccine-name').answer.valueCoding }}"
-          occurrenceDateTime: "{{ %immunizationGroup.item.where(linkId='date-of-injection').answer.valueDate }}"
+          occurrenceDateTime: "{{ %immunizationGroup.item.where(linkId='date-of-injection').answer.valueDateTime }}"
           status: completed
