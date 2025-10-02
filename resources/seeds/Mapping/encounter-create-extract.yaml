@@ -16,6 +16,9 @@ body:
         method: POST
       resource:
         resourceType: Encounter
+        meta:
+          profile:
+            - http://hl7.org.au/fhir/core/StructureDefinition/au-core-encounter
         period:
           start: "{{ %startDateTime }}"
         status: in-progress
@@ -28,6 +31,3 @@ body:
           reference: "Patient/{{ %patientId }}"
         participant:
           - individual: "{{ %practitioner }}"
-meta:
-  profile:
-    - http://hl7.org.au/fhir/core/StructureDefinition/au-core-encounter
