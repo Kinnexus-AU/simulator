@@ -48,10 +48,6 @@ item:
   - linkId: height
     text: Height
     type: quantity
-    code:
-      - system: http://snomed.info/sct
-        code: "50373000"
-        display: "Body height"
     extension:
       - url: http://hl7.org/fhir/StructureDefinition/entryFormat
         valueString: Enter height in cm
@@ -63,10 +59,6 @@ item:
   - linkId: weight
     text: Weight
     type: quantity
-    code:
-      - system: http://snomed.info/sct
-        code: "27113001"
-        display: "Body weight"
     extension:
       - url: http://hl7.org/fhir/StructureDefinition/entryFormat
         valueString: Enter weight in kg
