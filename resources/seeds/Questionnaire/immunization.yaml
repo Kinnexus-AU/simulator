@@ -1,0 +1,50 @@
+id: immunization
+resourceType: Questionnaire
+meta:
+  profile:
+    - https://emr-core.beda.software/StructureDefinition/fhir-emr-questionnaire
+name: immunization
+title: Immunization
+status: active
+subjectType:
+  - Patient
+launchContext:
+  - name:
+      code: Patient
+    type:
+      - Patient
+mapping:
+  - reference: Mapping/immunization-extract
+item:
+  - linkId: patient-id
+    text: PatientId
+    type: string
+    hidden: true
+    initialExpression:
+      language: text/fhirpath
+      expression: "%Patient.id"
+
+  - linkId: vaccine-group
+    text: Vaccine administered
+    type: group
+    repeats: true
+    item:
+      - linkId: vaccine-name
+        text: Name of vaccine
+        required: true
+        type: choice
+        entryFormat: Select vaccine
+        answerOption:
+          - valueCoding:
+              system: "https://www.humanservices.gov.au/organisations/health-professionals/enablers/air-vaccine-code-formats"
+              code: "GNPNE"
+              display: Generic Pneumococcal
+          - valueCoding:
+              system: "https://www.humanservices.gov.au/organisations/health-professionals/enablers/air-vaccine-code-formats"
+              code: "GNFLU"
+              display: Generic Influenza
+
+      - linkId: date-of-injection
+        text: Date of injection
+        type: dateTime
+        required: true

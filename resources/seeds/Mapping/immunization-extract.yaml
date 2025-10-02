@@ -1,0 +1,25 @@
+id: immunization-extract
+type: FHIRPath
+resourceType: Mapping
+body:
+  "{% assign %}":
+    - patientId: "{{ %QuestionnaireResponse.answers('patient-id') }}"
+  resourceType: Bundle
+  type: transaction
+  entry:
+    - "{% for immunizationGroup in %QuestionnaireResponse.item.where(linkId='vaccine-group') %}":
+        request:
+          url: /Immunization
+          method: POST
+        resource:
+          resourceType: Immunization
+          meta:
+            profile:
+              - http://hl7.org.au/fhir/core/StructureDefinition/au-core-immunization
+          patient:
+            reference: "Patient/{{ %patientId }}"
+          vaccineCode:
+            coding:
+              - "{{ %immunizationGroup.item.where(linkId='vaccine-name').answer.valueCoding }}"
+          occurrenceDateTime: "{{ %immunizationGroup.item.where(linkId='date-of-injection').answer.valueDate }}"
+          status: completed
