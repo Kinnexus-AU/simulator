@@ -1,0 +1,68 @@
+id: lifestyle-vitals
+name: lifestyle-vitals
+title: Lifestyle & Vitals
+resourceType: Questionnaire
+meta:
+  profile:
+    - https://emr-core.beda.software/StructureDefinition/fhir-emr-questionnaire
+status: active
+subjectType:
+  - Encounter
+  - Patient
+launchContext:
+  - name:
+      code: Patient
+    type:
+      - Patient
+mapping:
+  - reference: Mapping/lifestyle-vitals-extract
+item:
+  - linkId: patient-id
+    text: PatientId
+    type: string
+    hidden: true
+    initialExpression:
+      language: text/fhirpath
+      expression: "%Patient.id"
+
+  - linkId: date-time
+    text: Date
+    type: dateTime
+    hidden: true
+    initialExpression:
+      language: text/fhirpath
+      expression: "now()"
+
+  - linkId: smoking-status
+    text: Smoking status
+    type: choice
+    required: true
+    code:
+      - system: http://snomed.info/sct
+        code: "1747861000168109"
+        display: "Tobacco smoking status"
+    entryFormat: Select smoking status
+    preferredTerminologyServer: https://tx.dev.hl7.org.au/fhir
+    answerValueSet: http://hl7.org/fhir/ValueSet/observation-status
+
+  - linkId: height
+    text: Height
+    type: quantity
+    extension:
+      - url: http://hl7.org/fhir/StructureDefinition/entryFormat
+        valueString: Enter height in cm
+    unitOption:
+      - code: cm
+        display: cm
+        system: http://unitsofmeasure.org
+
+  - linkId: weight
+    text: Weight
+    type: quantity
+    extension:
+      - url: http://hl7.org/fhir/StructureDefinition/entryFormat
+        valueString: Enter weight in kg
+    unitOption:
+      - code: kg
+        display: kg
+        system: http://unitsofmeasure.org    
