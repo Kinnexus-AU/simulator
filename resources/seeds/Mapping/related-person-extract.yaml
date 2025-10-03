@@ -4,6 +4,8 @@ resourceType: Mapping
 body:
   "{% assign %}":
     - patientId: "{{ %QuestionnaireResponse.answers('patient-id') }}"
+    - firstName: "{{ %QuestionnaireResponse.answers('related-person-first-name') }}"
+    - lastName: "{{ %QuestionnaireResponse.answers('related-person-last-name') }}"
   resourceType: Bundle
   type: transaction
   entry:
@@ -21,3 +23,7 @@ body:
           relationship:
               - coding:
                   - "{{ %relatedPersonGroup.item.where(linkId='relationship-type').answer.valueCoding }}"
+          name:
+            - given:
+                - "{{ %relatedPersonGroup.item.where(linkId='related-person-first-name').answer.valueString }}"
+              family: "{{ %relatedPersonGroup.item.where(linkId='related-person-last-name').answer.valueString }}"
