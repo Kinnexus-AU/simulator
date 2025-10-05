@@ -1,0 +1,47 @@
+id: related-person
+resourceType: Questionnaire
+meta:
+  profile:
+    - https://emr-core.beda.software/StructureDefinition/fhir-emr-questionnaire
+name: related-person
+title: Related person
+status: active
+subjectType:
+  - Patient
+launchContext:
+  - name:
+      code: Patient
+    type:
+      - Patient
+mapping:
+  - reference: Mapping/related-person-extract
+item:
+  - linkId: patient-id
+    text: PatientId
+    type: string
+    hidden: true
+    initialExpression:
+      language: text/fhirpath
+      expression: "%Patient.id"
+
+  - linkId: related-person-group
+    text: Related person
+    type: group
+    repeats: true
+    item:
+      - linkId: relationship-type
+        text: Relationship type
+        type: choice
+        entryFormat: Select relationship type
+        preferredTerminologyServer: https://tx.ontoserver.csiro.au/fhir
+        answerValueSet: https://healthterminologies.gov.au/fhir/ValueSet/related-person-relationship-type-1
+      
+      - linkId: related-person-first-name
+        text: First name
+        type: string
+        entryFormat: Enter first name
+
+      - linkId: related-person-last-name
+        text: Last name
+        type: string
+        entryFormat: Enter last name
