@@ -81,7 +81,7 @@ spec:
       - name: postgres-cert-dest
         mountPath: /dest
     - name: interpolate-init-bundle
-      image: ghcr.io/kinnexus-au/simulator-seeds:0.0.8
+      image: ghcr.io/kinnexus-au/simulator-seeds:0.0.9
       command:
       - /app/entrypoint.sh
       - export
