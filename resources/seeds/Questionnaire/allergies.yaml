@@ -40,6 +40,12 @@ item:
       - linkId: medication-allergy-name
         text: Name of medication resulting in allergic reaction
         type: choice
+        required: true
         entryFormat: Select medication
         preferredTerminologyServer: https://tx.ontoserver.csiro.au/fhir
         answerValueSet: https://healthterminologies.gov.au/fhir/ValueSet/adverse-reaction-agent-1
+      
+      - linkId: onset-date
+        text: Onset date
+        type: date
+        required: true
