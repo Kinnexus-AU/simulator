@@ -28,248 +28,137 @@ item:
       language: text/fhirpath
       expression: "%Patient.id"
 
-  - linkId: patient-info-group
-    text: 1. Name
-    type: group
-    item:
-      - linkId: first-name
-        code:
-          - system: https://interrai.org/mds|2.0
-            code: "613340"
-        text: "a. Given name"
-        type: string
-        required: true
-        maxLength: 40
-        entryFormat: Enter given name
-        initialExpression:
-          language: text/fhirpath
-          expression: "%Patient.name.given[0]"
+  - linkId: first-name
+    text: First name
+    type: string
+    required: true
+    maxLength: 40
+    entryFormat: Enter first name
+    initialExpression:
+      language: text/fhirpath
+      expression: "%Patient.name.given[0]"
 
-      - linkId: last-name
-        code:
-          - system: https://interrai.org/mds|2.0
-            code: "613331"
-        text: "b. Family name"
-        type: string
-        required: true
-        maxLength: 40
-        entryFormat: Enter family name
-        initialExpression:
-          language: text/fhirpath
-          expression: "%Patient.name.family.first()"
+  - linkId: last-name
+    text: Last name
+    type: string
+    required: true
+    maxLength: 40
+    entryFormat: Enter last name
+    initialExpression:
+      language: text/fhirpath
+      expression: "%Patient.name.family.first()"
 
-  - linkId: gender-group
-    text: 2. Sex / gender identity
-    type: group
-    item:
-      - linkId: gender
-        code:
-          - system: https://interrai.org/mds|2.0
-            code: "741686"
-        text: "a. Sex"
-        type: choice
-        required: true
-        itemControl:
-          coding:
-            - code: inline-choice
-        extension:
-          - url: http://hl7.org/fhir/StructureDefinition/entryFormat
-            valueString: Select sex        
-        initialExpression:
-          language: text/fhirpath
-          expression: |-
-            %Questionnaire.repeat(item).where(linkId='gender').answerOption.valueCoding.where(
-              code=%Patient.gender
-            )
-        answerOption:
-          - valueCoding:
-              code: male
-              system: http://hl7.org/fhir/administrative-gender
-              display: Male
-          - valueCoding:
-              code: female
-              system: http://hl7.org/fhir/administrative-gender
-              display: Female
-          - valueCoding:
-              code: other
-              system: http://hl7.org/fhir/administrative-gender
-              display: Another Term
-          - valueCoding:
-              code: unknown
-              system: http://hl7.org/fhir/administrative-gender
-              display: Not stated / inadequately described 
+  - linkId: birthdate
+    text: Birthdate
+    type: date
+    required: true
+    entryFormat: Select birthdate
+    initialExpression:
+      language: text/fhirpath
+      expression: "%Patient.birthDate"
 
-      - linkId: gender-identity
-        code:
-          - system: https://interrai.org/mds|2.0
-            code: "741842"
-        text: "b. Gender"
-        type: choice
-        extension:
-          - url: http://hl7.org/fhir/StructureDefinition/entryFormat
-            valueString: Select gender
-        initialExpression:
-          language: text/fhirpath
-          expression: |-
-            %Patient.extension(
-              'http://hl7.org/fhir/StructureDefinition/individual-genderIdentity'
-            ).extension('value').valueCodeableConcept.coding.first()
-        answerOption:
-          - valueCoding:
-              code: "446151000124109"
-              system: http://snomed.info/sct
-              display: Man, or boy, or male
-          - valueCoding:
-              code: "446141000124107"
-              system: http://snomed.info/sct
-              display: Woman, or girl, or female
-          - valueCoding:
-              code: "33791000087105"
-              system: http://snomed.info/sct
-              display: Non-binary
-          - valueCoding:
-              code: "446131000124102"
-              system: http://snomed.info/sct
-              display: Different term
-          - valueCoding:
-              code: "asked-declined"
-              system: http://terminology.hl7.org/CodeSystem/data-absent-reason
-              display: Prefer not to answer
-          - valueCoding:
-              code: "UNK"
-              system: http://terminology.hl7.org/CodeSystem/v3-NullFlavor
-              display: Non stated / inadequately described
+  - linkId: gender
+    text: Gender
+    type: choice
+    required: true
+    extension:
+      - url: http://hl7.org/fhir/StructureDefinition/entryFormat
+        valueString: Select gender        
+    initialExpression:
+      language: text/fhirpath
+      expression: |-
+        %Questionnaire.repeat(item).where(linkId='gender').answerOption.valueCoding.where(
+          code=%Patient.gender
+        )
+    answerOption:
+      - valueCoding:
+          code: "male"
+          system: http://hl7.org/fhir/administrative-gender
+          display: Male
+      - valueCoding:
+          code: "female"
+          system: http://hl7.org/fhir/administrative-gender
+          display: Female
+      - valueCoding:
+          code: "other"
+          system: http://hl7.org/fhir/administrative-gender
+          display: Other
+      - valueCoding:
+          code: "unknown"
+          system: http://hl7.org/fhir/administrative-gender
+          display: Unknown
 
-  - linkId: ethnicity-race-group    
-    text: 3. Ethnicity and race
-    type: group
-    item:
-      - linkId: birth-place
-        code:
-          - system: https://interrai.org/mds|2.0
-            code: "659454"
-        text: "a. Country of birth"
-        type: string
-        entryFormat: Specify country of birth
-        initialExpression:
-          language: text/fhirpath
-          expression: |-
-            %Patient.extension('http://hl7.org/fhir/StructureDefinition/patient-birthPlace').valueAddress.text
+  - linkId: gender-identity
+    text: Gender identity
+    type: choice
+    extension:
+      - url: http://hl7.org/fhir/StructureDefinition/entryFormat
+        valueString: Select gender
+    initialExpression:
+      language: text/fhirpath
+      expression: |-
+        %Patient.extension(
+          'http://hl7.org/fhir/StructureDefinition/individual-genderIdentity'
+        ).extension('value').valueCodeableConcept.coding.first()
+    answerOption:
+      - valueCoding:
+          code: "446151000124109"
+          system: http://snomed.info/sct
+          display: Identifies as male gender (finding)
+      - valueCoding:
+          code: "446141000124107"
+          system: http://snomed.info/sct
+          display: Identifies as female gender (finding)
+      - valueCoding:
+          code: "33791000087105"
+          system: http://snomed.info/sct
+          display: Identifies as gender nonbinary
+      - valueCoding:
+          code: "asked-declined"
+          system: http://terminology.hl7.org/CodeSystem/data-absent-reason
+          display: Asked But Declined
+      - valueCoding:
+          code: "UNK"
+          system: http://terminology.hl7.org/CodeSystem/v3-NullFlavor
+          display: Unknown
 
-      - linkId: indigenous-status
-        code:
-          - system: https://interrai.org/iCode 
-            code: "602543"
-        text: "b. Indigenous status"
-        helpText: Is the client of Aboriginal or Torres Strait Islander origin?
-        type: choice
-        itemControl:
-          coding:
-            - code: inline-choice
-        initialExpression:
-          language: text/fhirpath
-          expression: |-
-            %Questionnaire.repeat(item).where(linkId='indigenous-status').answerOption.valueCoding.where(
-              code=%Patient.extension('http://hl7.org.au/fhir/StructureDefinition/indigenous-status').valueCoding.code
-            )
-        answerOption:
-          - valueCoding:
-              code: "1"
-              system: https://healthterminologies.gov.au/fhir/CodeSystem/australian-indigenous-status-1
-              display: 1. Aboriginal but not Torres Strait Islander origin
-          - valueCoding:
-              code: "2"
-              system: https://healthterminologies.gov.au/fhir/CodeSystem/australian-indigenous-status-1
-              display: 2. Torres Strait Islander but not Aboriginal origin
-          - valueCoding:
-              code: "3"
-              system: https://healthterminologies.gov.au/fhir/CodeSystem/australian-indigenous-status-1
-              display: 3. Both Aboriginal and Torres Strait Islander origin
-          - valueCoding:
-              code: "4"
-              system: https://healthterminologies.gov.au/fhir/CodeSystem/australian-indigenous-status-1
-              display: 4. Neither Aboriginal nor Torres Strait Islander origin
-          - valueCoding:
-              code: "9"
-              system: https://healthterminologies.gov.au/fhir/CodeSystem/australian-indigenous-status-1
-              display: 9. Not stated / inadequately described
+  - linkId: birth-place
+    text: Place of birth
+    type: string
+    entryFormat: Specify place of birth
+    initialExpression:
+      language: text/fhirpath
+      expression: |-
+        %Patient.extension('http://hl7.org/fhir/StructureDefinition/patient-birthPlace').valueAddress.text
 
-  - linkId: birthdate-group
-    text: 4. Birthdate
-    type: group
-    item:
-      - linkId: birthdate
-        code:
-          - system: https://interrai.org/iCode
-            code: iA3
-        type: date
-        required: true
-        entryFormat: Select birthdate
-        initialExpression:
-          language: text/fhirpath
-          expression: "%Patient.birthDate"
+  - linkId: indigenous-status
+    text: Indigenous status
+    type: choice
+    initialExpression:
+      language: text/fhirpath
+      expression: |-
+        %Patient.extension('http://hl7.org.au/fhir/StructureDefinition/indigenous-status').valueCoding
+    preferredTerminologyServer: https://tx.ontoserver.csiro.au/fhir
+    answerValueSet: https://healthterminologies.gov.au/fhir/ValueSet/australian-indigenous-status-1
 
-  - linkId: marital-status-group
-    text: 5. Marital status
-    type: group
-    item:
-      - linkId: marital-status
-        code:
-          - system: https://interrai.org/mds|2.0
-            code: "766507"
-        type: choice
-        entryFormat: Select marital status
-        initialExpression:
-          language: text/fhirpath
-          expression: "%Patient.maritalStatus.coding.first()"
-        answerOption:
-          - valueCoding:
-              code: "S"
-              system: http://terminology.hl7.org/CodeSystem/v3-MaritalStatus
-              display: Never married
-          - valueCoding:
-              code: "W"
-              system: http://terminology.hl7.org/CodeSystem/v3-MaritalStatus
-              display: Widowed
-          - valueCoding:
-              code: "D"
-              system: http://terminology.hl7.org/CodeSystem/v3-MaritalStatus
-              display: Divorced
-          - valueCoding:
-              code: "L"
-              system: http://terminology.hl7.org/CodeSystem/v3-MaritalStatus
-              display: Separated
-          - valueCoding:
-              code: "M"
-              system: http://terminology.hl7.org/CodeSystem/v3-MaritalStatus
-              display: Married (registered and de facto)
-          - valueCoding:
-              code: "NA"
-              system: http://terminology.hl7.org/CodeSystem/v3-NullFlavor
-              display: Not applicable
-          - valueCoding:
-              code: "UNK"
-              system: http://terminology.hl7.org/CodeSystem/v3-NullFlavor
-              display: Unknown / unable to be determined
-          - valueCoding:
-              code: "NI"
-              system: http://terminology.hl7.org/CodeSystem/v3-NullFlavor
-              display: Not stated / inadequately described
+  - linkId: marital-status
+    text: Marital status
+    type: choice
+    entryFormat: Select marital status
+    initialExpression:
+      language: text/fhirpath
+      expression: "%Patient.maritalStatus.coding.first()"
+    preferredTerminologyServer: https://tx.dev.hl7.org.au/fhir
+    answerValueSet: http://hl7.org/fhir/ValueSet/marital-status  
 
-  - linkId: medicare-number-group
-    text: 6. Medicare number
-    type: group
-    item:
-      - linkId: medicare-number
-        code:
-          - system: https://interrai.org/iCode
-            code: iA5
-        type: string
-        required: true
-        initialExpression:
-          language: text/fhirpath
-          expression: |-
-            %Patient.identifier.where(system='http://ns.electronichealth.net.au/id/medicare-number').value
-        extension:
-          - url: http://hl7.org/fhir/StructureDefinition/entryFormat
-            valueString: 0000-0000-0
+  - linkId: medicare-number
+    text: Medicare number
+    type: string
+    required: true
+    initialExpression:
+      language: text/fhirpath
+      expression: |-
+        %Patient.identifier.where(system='http://ns.electronichealth.net.au/id/medicare-number').value
+    extension:
+      - url: http://hl7.org/fhir/StructureDefinition/entryFormat
+        valueString: 0000-0000-0

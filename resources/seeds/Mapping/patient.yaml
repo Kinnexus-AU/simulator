@@ -2,6 +2,22 @@ id: patient
 type: FHIRPath
 resourceType: Mapping
 body:
+  "{% assign %}":
+    - patientId: "{{ %QuestionnaireResponse.answers('patient-id') }}"
+    - firstName: "{{ %QuestionnaireResponse.answers('first-name') }}"
+    - middleName: "{{ %QuestionnaireResponse.answers('middle-name') }}"
+    - lastName: "{{ %QuestionnaireResponse.answers('last-name') }}"
+    - title: "{{ %QuestionnaireResponse.answers('title') }}"
+    - gender: "{{ %QuestionnaireResponse.answers('gender') }}"
+    - genderIdentity: "{{ %QuestionnaireResponse.answers('gender-identity') }}"
+    - selfIdentifiedGender: "{{ %QuestionnaireResponse.answers('self-identified-gender') }}"
+    - birthDate: "{{ %QuestionnaireResponse.answers('birthdate') }}"
+    - maritalStatus: "{{ %QuestionnaireResponse.answers('marital-status') }}"
+    - birthPlace: "{{ %QuestionnaireResponse.answers('birth-place') }}"
+    - indigenousStatus: "{{ %QuestionnaireResponse.answers('indigenous-status') }}"
+    - medicareNumber: "{{ %QuestionnaireResponse.answers('medicare-number') }}"
+    - medicalRecordNumber: "{{ %QuestionnaireResponse.answers('patient-record-number') }}"
+  resourceType: Bundle
   type: transaction
   entry:
     - fullUrl: "{{ 'urn:uuid:patient-id' }}"
@@ -53,17 +69,7 @@ body:
                   text: "{{ %birthPlace }}"
           - "{% if %indigenousStatus.exists() %}":
               - url: "http://hl7.org.au/fhir/StructureDefinition/indigenous-status"
-                valueCoding: 
-                  '{% assign %}':
-                    displayValue:
-                      - "{% if %indigenousStatus.code = '1' %}": Aboriginal but not Torres Strait Islander origin
-                      - "{% if %indigenousStatus.code = '2' %}": Torres Strait Islander but not Aboriginal origin
-                      - "{% if %indigenousStatus.code = '3' %}": Both Aboriginal and Torres Strait Islander origin
-                      - "{% if %indigenousStatus.code = '4' %}": Neither Aboriginal nor Torres Strait Islander origin
-                      - "{% if %indigenousStatus.code = '9' %}": Not stated/inadequately described
-                  code: '{{ %indigenousStatus.code }}'
-                  system: '{{ %indigenousStatus.system }}'
-                  display: '{{ %displayValue }}'
+                valueCoding: '{{ %indigenousStatus }}'
         "{% if %maritalStatus.exists() %}":
           maritalStatus: 
             coding:
@@ -72,20 +78,3 @@ body:
         meta:
           profile:
             - http://hl7.org.au/fhir/core/StructureDefinition/au-core-patient
-  resourceType: Bundle
-  "{% assign %}":
-    - patientId: "{{ %QuestionnaireResponse.answers('patient-id') }}"
-    - firstName: "{{ %QuestionnaireResponse.answers('first-name') }}"
-    - middleName: "{{ %QuestionnaireResponse.answers('middle-name') }}"
-    - lastName: "{{ %QuestionnaireResponse.answers('last-name') }}"
-    - title: "{{ %QuestionnaireResponse.answers('title') }}"
-    - gender: "{{ %QuestionnaireResponse.answers('gender') }}"
-    - genderIdentity: "{{ %QuestionnaireResponse.answers('gender-identity') }}"
-    - selfIdentifiedGender: "{{ %QuestionnaireResponse.answers('self-identified-gender') }}"
-    - birthDate: "{{ %QuestionnaireResponse.answers('birthdate') }}"
-    - maritalStatus: "{{ %QuestionnaireResponse.answers('marital-status') }}"
-    - birthPlace: "{{ %QuestionnaireResponse.answers('birth-place') }}"
-    - indigenousStatus: "{{ %QuestionnaireResponse.answers('indigenous-status') }}"
-    - medicareNumber: "{{ %QuestionnaireResponse.answers('medicare-number') }}"
-    - medicalRecordNumber: "{{ %QuestionnaireResponse.answers('patient-record-number') }}"
-
