@@ -180,7 +180,8 @@ item:
     initialExpression:
       language: text/fhirpath
       expression: |-
-        %Patient.extension('http://hl7.org/fhir/StructureDefinition/patient-interpreterRequired').exists().iif(
+        iif(
+          %Patient.extension('http://hl7.org/fhir/StructureDefinition/patient-interpreterRequired').exists(),
           %Questionnaire.repeat(item).where(linkId='interpreter-needed').answerOption.valueCoding.where(
             code=iif(
               %Patient.extension('http://hl7.org/fhir/StructureDefinition/patient-interpreterRequired').valueBoolean,
