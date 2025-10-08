@@ -1,0 +1,24 @@
+id: encounter-discharge-extract
+type: FHIRPath
+resourceType: Mapping
+body:
+  resourceType: Bundle
+  "{% assign %}":
+    - encounter: "{{ %QuestionnaireResponse.answers('encounter') }}"
+    - endDate: "{{ %QuestionnaireResponse.answers('end-date') }}"
+    - dischargeDisposition: "{{ %QuestionnaireResponse.answers('discharge-disposition') }}"
+    - dischargeNotes: "{{ %QuestionnaireResponse.answers('discharge-notes') }}"
+  type: transaction
+  entry:
+    - request:
+        url: "{{ %encounter.reference }}"
+        method: PATCH
+      resource:
+        resourceType: Encounter
+        period:
+          end: "{{ %endDate }}"
+        status: finished
+        hospitalization:
+          dischargeDisposition:
+            coding:
+              - "{{ %dischargeDisposition }}"

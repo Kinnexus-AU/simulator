@@ -1,0 +1,48 @@
+id: encounter-discharge
+resourceType: Questionnaire
+meta:
+  profile:
+    - https://emr-core.beda.software/StructureDefinition/fhir-emr-questionnaire
+name: encounter-discharge
+title: Encounter discharge
+status: active
+subjectType:
+  - Patient
+launchContext:
+  - name:
+      code: Patient
+    type:
+      - Patient
+mapping:
+  - reference: Mapping/encounter-discharge-extract
+
+item:
+  - linkId: encounter
+    text: Encounter
+    type: reference
+    required: true
+    referenceResource:
+      - Encounter
+    entryFormat: Select encounter
+    answerExpression:
+      language: application/x-fhir-query
+      expression: "Encounter?status=in-progress&patient={{ %Patient.id }}"
+    choiceColumn:
+      - forDisplay: true
+        path: >-
+          period.start
+
+  - linkId: discharge-disposition
+    text: Residential/living status after discharge
+    type: choice
+    entryFormat: Select residential/living status after discharge
+    preferredTerminologyServer: https://tx.ontoserver.csiro.au/fhir
+    answerValueSet: https://healthterminologies.gov.au/fhir/ValueSet/separation-mode-1
+
+  - linkId: end-date
+    text: Discharge date
+    type: dateTime
+    initialExpression:
+      language: text/fhirpath
+      expression: "now()"
+

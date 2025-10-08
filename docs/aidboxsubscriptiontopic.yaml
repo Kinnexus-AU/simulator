@@ -1,0 +1,6 @@
+url: >-
+  http://aidbox.simulator.kinnexus.beda.software/FHIR/R5/SubscriptionTopic/Encounter-topic
+status: active
+trigger:
+  - resource: Encounter
+resourceType: AidboxSubscriptionTopic

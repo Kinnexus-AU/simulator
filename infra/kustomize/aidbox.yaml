@@ -28,7 +28,7 @@ spec:
     host: aidbox.simulator.kinnexus.beda.software
     protocol: https
     image:
-      tag: stable
+      tag: edge
     config:
       BOX_FHIR_CREATEDAT_URL: https://aidbox.app/ex/createdAt
       BOX_BOOTSTRAP_FHIR_PACKAGES: "hl7.fhir.r4.core#4.0.1"
@@ -81,7 +81,7 @@ spec:
       - name: postgres-cert-dest
         mountPath: /dest
     - name: interpolate-init-bundle
-      image: ghcr.io/kinnexus-au/simulator-seeds:0.0.5
+      image: ghcr.io/kinnexus-au/simulator-seeds:0.0.9
       command:
       - /app/entrypoint.sh
       - export
