@@ -93,7 +93,7 @@ item:
     type: choice
     extension:
       - url: http://hl7.org/fhir/StructureDefinition/entryFormat
-        valueString: Select gender
+        valueString: Select gender identity
     initialExpression:
       language: text/fhirpath
       expression: |-
@@ -134,6 +134,7 @@ item:
   - linkId: indigenous-status
     text: Indigenous status
     type: choice
+    entryFormat: Select indigenous status
     initialExpression:
       language: text/fhirpath
       expression: |-
@@ -150,6 +151,45 @@ item:
       expression: "%Patient.maritalStatus.coding.first()"
     preferredTerminologyServer: https://tx.dev.hl7.org.au/fhir
     answerValueSet: http://hl7.org/fhir/ValueSet/marital-status  
+
+  - linkId: preferred-language
+    text: Preferred language
+    type: choice
+    entryFormat: Select preferred language
+    preferredTerminologyServer: https://tx.fhir.org/r4
+    answerValueSet: http://hl7.org/fhir/ValueSet/languages
+    initialExpression:
+      language: text/fhirpath
+      expression: "%Patient.communication.where(preferred=true).language.coding.first()"
+
+  - linkId: interpreter-needed
+    text: Interpreter needed
+    type: choice
+    itemControl:
+      coding:
+        - code: inline-choice
+    answerOption:
+      - valueCoding:
+          system: http://terminology.hl7.org/CodeSystem/v2-0532
+          code: "N"
+          display: "No"
+      - valueCoding:
+          system: http://terminology.hl7.org/CodeSystem/v2-0532
+          code: "Y"
+          display: "Yes"
+    initialExpression:
+      language: text/fhirpath
+      expression: |-
+        %Patient.extension('http://hl7.org/fhir/StructureDefinition/patient-interpreterRequired').exists().iif(
+          %Questionnaire.repeat(item).where(linkId='interpreter-needed').answerOption.valueCoding.where(
+            code=iif(
+              %Patient.extension('http://hl7.org/fhir/StructureDefinition/patient-interpreterRequired').valueBoolean,
+              'Y',
+              'N'
+            )
+          ),
+          {}
+        )
 
   - linkId: medicare-number
     text: Medicare number
