@@ -1,0 +1,51 @@
+id: allergies
+resourceType: Questionnaire
+meta:
+  profile:
+    - https://emr-core.beda.software/StructureDefinition/fhir-emr-questionnaire
+name: allergies
+title: Allergies
+status: active
+subjectType:
+  - Patient
+launchContext:
+  - name:
+      code: Patient
+    type:
+      - Patient
+mapping:
+  - reference: Mapping/allergies-extract
+item:
+  - linkId: patient-id
+    text: PatientId
+    type: string
+    hidden: true
+    initialExpression:
+      language: text/fhirpath
+      expression: "%Patient.id"
+
+  - linkId: date-time
+    text: Date
+    type: dateTime
+    hidden: true
+    initialExpression:
+      language: text/fhirpath
+      expression: "now()"
+
+  - linkId: medication-allergy
+    text: Medication allergy
+    type: group
+    repeats: true
+    item:
+      - linkId: medication-allergy-name
+        text: Name of medication resulting in allergic reaction
+        type: choice
+        required: true
+        entryFormat: Select medication
+        preferredTerminologyServer: https://tx.ontoserver.csiro.au/fhir
+        answerValueSet: https://healthterminologies.gov.au/fhir/ValueSet/adverse-reaction-agent-1
+      
+      - linkId: onset-date
+        text: Onset date
+        type: date
+        required: true
