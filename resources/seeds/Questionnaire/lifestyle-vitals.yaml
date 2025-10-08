@@ -33,13 +33,13 @@ item:
       language: text/fhirpath
       expression: "now()"
 
-  - linkId: smoking-status
-    text: Smoking status
-    type: choice
-    required: true
-    entryFormat: Select smoking status
-    preferredTerminologyServer: https://tx.ontoserver.csiro.au/fhir
-    answerValueSet: https://healthterminologies.gov.au/fhir/ValueSet/smoking-status-1
+  #- linkId: smoking-status
+  #  text: Smoking status
+  #  type: choice
+  #  required: true
+  #  entryFormat: Select smoking status
+  #  preferredTerminologyServer: https://tx.ontoserver.csiro.au/fhir
+  #  answerValueSet: https://healthterminologies.gov.au/fhir/ValueSet/smoking-status-1
 
   - linkId: height
     text: Height

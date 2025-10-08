@@ -12,35 +12,34 @@ body:
   type: transaction
   entry:
     # Smoking Status Observation
-    - request:
-        url: "Observation"
-        method: POST
-      resource:
-        resourceType: Observation
-        meta:
-          profile:
-            - http://hl7.org.au/fhir/core/StructureDefinition/au-core-smokingstatus
-        status: final
-        category:
-          - coding:
-              - system: http://terminology.hl7.org/CodeSystem/observation-category
-                code: social-history
-                display: Social History
-        code:
-          coding:
-            - system: http://snomed.info/sct
-              code: "1747861000168109"
-              display: "Tobacco smoking status"
-            - system: http://loinc.org
-              code: "72166-2"
-              display: "Tobacco smoking status"
-        subject:
-          reference: "Patient/{{ %patientId }}"
-        effectiveDateTime: "{{ %dateTime }}"
-        valueCodeableConcept: 
-          coding:
-            - "{{ %smokingStatus }}"
-
+    #- request:
+    #    url: "Observation"
+    #    method: POST
+    #  resource:
+    #    resourceType: Observation
+    #    meta:
+    #      profile:
+    #        - http://hl7.org.au/fhir/core/StructureDefinition/au-core-smokingstatus
+    #    status: final
+    #    category:
+    #      - coding:
+    #          - system: http://terminology.hl7.org/CodeSystem/observation-category
+    #            code: social-history
+    #            display: Social History
+    #    code:
+    #      coding:
+    #        - system: http://snomed.info/sct
+    #          code: "1747861000168109"
+    #          display: "Tobacco smoking status"
+    #        - system: http://loinc.org
+    #          code: "72166-2"
+    #          display: "Tobacco smoking status"
+    #    subject:
+    #      reference: "Patient/{{ %patientId }}"
+    #    effectiveDateTime: "{{ %dateTime }}"
+    #    valueCodeableConcept: 
+    #      coding:
+    #        - "{{ %smokingStatus }}"
     # Body Height Observation
     - request:
         url: "Observation"
