@@ -14704,6 +14704,17 @@ scroll-into-view-if-needed@^3.1.0:
   dependencies:
     compute-scroll-into-view "^3.0.2"
 
+sdc-qrf@^0.3.36:
+  version "0.3.36"
+  resolved "https://registry.yarnpkg.com/sdc-qrf/-/sdc-qrf-0.3.36.tgz#ab9bcfc5e2c7cc0942a8e3908054cdcdd6f42730"
+  integrity sha512-Aguqf2EwLh96bL3SaPOPb4D7pjC1CETWnjzVfDoezfA9RUPYvAtDMeAUOl2TQp2M2iuv6wppC9aafqG/Yj6xkA==
+  dependencies:
+    classnames "^2.5.1"
+    fhirpath "^3.18.0"
+    lodash "^4.17.21"
+    query-string "^7.1.1"
+    uuid "^11.1.0"
+
 sdc-qrf@^1.0.0-beta.18:
   version "1.0.0-beta.21"
   resolved "https://registry.yarnpkg.com/sdc-qrf/-/sdc-qrf-1.0.0-beta.21.tgz#ffff7e2afb4c84f42b81b7296c1559436b4453ac"
