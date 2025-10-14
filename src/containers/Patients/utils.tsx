@@ -115,7 +115,7 @@ export function getResourceConfigData<T extends AvailableResourceTypes, RCM exte
             ],
         },
         Encounter: {
-            title: 'Encounters',
+            title: 'Admissions',
             icon: <AlertOutlined />,
             columns: [
                 {
