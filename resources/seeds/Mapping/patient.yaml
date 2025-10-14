@@ -18,6 +18,7 @@ body:
     - medicalRecordNumber: "{{ %QuestionnaireResponse.answers('patient-record-number') }}"
     - preferredLanguage: "{{ %QuestionnaireResponse.answers('preferred-language') }}"
     - interpreterNeeded: "{{ %QuestionnaireResponse.answers('interpreter-needed') }}"
+    - usualPostalCode: "{{ %QuestionnaireResponse.answers('usual-postal-code') }}"
   resourceType: Bundle
   type: transaction
   entry:
@@ -64,6 +65,9 @@ body:
                 coding:
                   - "{{ %preferredLanguage }}"
               preferred: true
+        address:
+          - "{% if %usualPostalCode.exists() %}":
+              postalCode: "{{ %usualPostalCode }}"
         extension:
           - "{% if %genderIdentity.exists() %}":
               - url: "http://hl7.org/fhir/StructureDefinition/individual-genderIdentity"

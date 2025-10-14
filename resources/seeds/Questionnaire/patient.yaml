@@ -61,9 +61,7 @@ item:
     text: Gender
     type: choice
     required: true
-    extension:
-      - url: http://hl7.org/fhir/StructureDefinition/entryFormat
-        valueString: Select gender        
+    entryFormat: Select gender
     initialExpression:
       language: text/fhirpath
       expression: |-
@@ -91,9 +89,7 @@ item:
   - linkId: gender-identity
     text: Gender identity
     type: choice
-    extension:
-      - url: http://hl7.org/fhir/StructureDefinition/entryFormat
-        valueString: Select gender identity
+    entryFormat: Select gender identity
     initialExpression:
       language: text/fhirpath
       expression: |-
@@ -130,6 +126,14 @@ item:
       language: text/fhirpath
       expression: |-
         %Patient.extension('http://hl7.org/fhir/StructureDefinition/patient-birthPlace').valueAddress.text
+
+  - linkId: usual-postal-code
+    text: Postal code of usual living address
+    type: string
+    entryFormat: Enter postal code
+    initialExpression:
+      language: text/fhirpath
+      expression: "%Patient.address.postalCode"
 
   - linkId: indigenous-status
     text: Indigenous status
@@ -200,6 +204,4 @@ item:
       language: text/fhirpath
       expression: |-
         %Patient.identifier.where(system='http://ns.electronichealth.net.au/id/medicare-number').value
-    extension:
-      - url: http://hl7.org/fhir/StructureDefinition/entryFormat
-        valueString: 0000-0000-0
+    entryFormat: 0000-0000-0
