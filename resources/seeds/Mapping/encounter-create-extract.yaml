@@ -31,3 +31,8 @@ body:
           reference: "Patient/{{ %patientId }}"
         participant:
           - individual: "{{ %practitioner }}"
+            type:
+            - coding:
+              - system: http://terminology.hl7.org/CodeSystem/v3-ParticipationType
+                code: PPRF
+                display: primary performer
