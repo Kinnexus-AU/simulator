@@ -28,23 +28,25 @@ const patientDashboardConfig: DashboardInstance = {
                 }),
             },
             widget: StandardCardContainerFabric(preparePatient),
-    },
+        },
         {
             query: {
                 resourceType: 'Encounter',
                 search: (patient: Patient) => ({
                     patient: patient.id,
+                    _sort: '-date',
                     _count: 7,
                 }),
             },
             widget: StandardCardContainerFabric(prepareEncounters),
-    }
+        }
     ],
     left: [{
         query: {
             resourceType: 'AllergyIntolerance',
             search: (patient: Patient) => ({
                 patient: patient.id,
+                _sort: '-date',
                 _count: 7,
             }),
         },
@@ -55,6 +57,7 @@ const patientDashboardConfig: DashboardInstance = {
             resourceType: 'Immunization',
             search: (patient: Patient) => ({
                 patient: patient.id,
+                _sort: '-date',
                 _count: 7,
             }),
         },
@@ -68,6 +71,7 @@ const patientDashboardConfig: DashboardInstance = {
                 resourceType: 'Observation',
                 search: (patient: Patient) => ({
                     subject: patient.id,
+                    _sort: '-date',
                     _count: 7,
                 }),
             },
