@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: sdc-simulator
-        image: bedasoftware/fhir-sdc:1.0.0a13
+        image: bedasoftware/fhir-sdc:1.0.0a17
         imagePullPolicy: Always
         resources:
           requests:

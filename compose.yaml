@@ -30,7 +30,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: aidbox
   sdc:
-    image: bedasoftware/fhir-sdc:1.0.0a13
+    image: bedasoftware/fhir-sdc:1.0.0a17
     depends_on:
       aidbox:
         condition: service_healthy
