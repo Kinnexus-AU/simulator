@@ -46,5 +46,5 @@ item:
 
       - linkId: date-of-injection
         text: Date of injection
-        type: dateTime
+        type: date
         required: true
