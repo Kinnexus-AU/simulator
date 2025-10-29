@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: simulator
-        image: ghcr.io/kinnexus-au/simulator:0.0.14
+        image: ghcr.io/kinnexus-au/simulator:0.0.15
         imagePullPolicy: Always
         resources:
           requests:
