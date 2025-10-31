@@ -1,0 +1,6 @@
+name:
+  - given:
+      - Practitioner
+    family: Test
+id: practitioner
+resourceType: Practitioner

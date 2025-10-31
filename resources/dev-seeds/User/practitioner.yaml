@@ -1,0 +1,6 @@
+email: "${PRACTITIONER_EMAIL}"
+fhirUser:
+  reference: urn:uuid:Practitioner:practitioner
+password: "${PRACTITIONER_PASSWORD}"
+id: practitioner
+resourceType: User
