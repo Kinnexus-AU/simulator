@@ -4,3 +4,8 @@ name:
     family: Test
 id: practitioner
 resourceType: Practitioner
+meta:
+  extension:
+    - url: https://aidbox.app/tenant-organization-id
+      valueReference:
+        reference: urn:uuid:Organization:simulator

@@ -4,3 +4,8 @@ fhirUser:
 password: "${PRACTITIONER_PASSWORD}"
 id: practitioner
 resourceType: User
+meta:
+  extension:
+    - url: https://aidbox.app/tenant-organization-id
+      valueReference:
+        reference: urn:uuid:Organization:simulator
