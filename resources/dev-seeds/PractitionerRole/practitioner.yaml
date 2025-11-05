@@ -1,0 +1,4 @@
+id: practitioner
+resourceType: PractitionerRole
+practitioner:
+  reference: urn:uuid:Practitioner:practitioner

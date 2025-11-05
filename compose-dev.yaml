@@ -1,0 +1,53 @@
+include:
+  - path:
+      - ./compose.yaml
+
+services:
+  build-seeds-dev:
+    image: bedasoftware/fhirsnake:latest
+    command:
+      - export
+      - --output
+      - /app/resources/initBundle.json
+      - --external-questionnaire-fce-fhir-converter-url
+      - http://questionnaire-fce-fhir-converter:3000/to-fhir
+    depends_on:
+      questionnaire-fce-fhir-converter:
+        condition: service_healthy
+    volumes:
+      - ./resources/dev-seeds:/app/resources
+    env_file:
+      - env/dev-seeds
+
+  watch-seeds-dev:
+    image: bedasoftware/fhirsnake:latest
+    command:
+      - watch
+      - --external-fhir-server-url
+      - http://root:secret@aidbox:8080
+      - --external-questionnaire-fce-fhir-converter-url
+      - http://questionnaire-fce-fhir-converter:3000/to-fhir
+    volumes:
+      - ./resources/dev-seeds:/app/resources
+    env_file:
+      - env/dev-seeds
+    depends_on:
+      questionnaire-fce-fhir-converter:
+        condition: service_healthy
+
+  upload-seeds-demo-bundle:
+    image: curlimages/curl
+    links:
+      - aidbox
+    depends_on:
+      aidbox:
+        condition: service_healthy
+      build-seeds-dev:
+        condition: service_completed_successfully
+    working_dir: /app/resources/dev-bundles
+    command:
+      - "sh"
+      - "-c"
+      - "curl -X POST 'http://root:secret@aidbox:8080/fhir' -H 'Content-Type: application/json' -d @initBundle.json"
+    volumes:
+      - ./resources/dev-seeds/:/app/resources/dev-bundles
