@@ -1,0 +1,4 @@
+id: practitioner
+resourceType: AccessPolicy
+engine: allow
+roleName: practitioner
