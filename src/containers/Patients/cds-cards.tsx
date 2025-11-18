@@ -1,5 +1,7 @@
+import { t } from '@lingui/macro';
 import { Card, Tag, Typography, Button } from 'antd';
 import { Patient } from 'fhir/r4b';
+import { useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { getFHIRResources as getAidboxResources, extractBundleResources } from 'aidbox-react/lib/services/fhir';
@@ -25,6 +27,7 @@ export function CDSCards({ patient }: ContainerProps) {
     const [services] = useService(() =>
         service<{ services: Array<CDSHook> }>({ baseURL: config.CDSBaseUrl, url: 'cds-services' }),
     );
+
     return (
         <RenderRemoteData remoteData={services}>
             {(data) => (
@@ -55,10 +58,14 @@ interface CDSResponse {
     detail: string;
     indicator: string;
     links?: Array<CDSLink>;
+    source?: {
+        url: string;
+    };
+    assessmentType?: string;
 }
 
 function ClinicalDecisionSupportServiceCard({ hook, patient }: ClinicalDecisionSupportServiceCardProps) {
-    const [services] = useService(() =>
+    const [services, manager] = useService(() =>
         service<{ cards: Array<CDSResponse> }>({
             baseURL: config.CDSBaseUrl,
             url: `cds-services/${hook.id}`,
@@ -74,6 +81,20 @@ function ClinicalDecisionSupportServiceCard({ hook, patient }: ClinicalDecisionS
             },
         }),
     );
+
+    const hideAssessmentCard = useCallback(
+        (encounterId: string, assessmentType: string) => {
+            service<{ taskId: string }>({
+                baseURL: config.CDSBaseUrl,
+                url: `cds-services/hide-assessment-card`,
+                method: 'POST',
+                data: { encounterId, assessmentType },
+            });
+            manager.softReloadAsync();
+        },
+        [manager],
+    );
+
     return (
         <RenderRemoteData
             remoteData={services}
@@ -82,7 +103,12 @@ function ClinicalDecisionSupportServiceCard({ hook, patient }: ClinicalDecisionS
             {(data) => (
                 <>
                     {data.cards.map((c) => (
-                        <ClinicalDecisionSupportCard key={c.uuid} card={c} patient={patient} />
+                        <ClinicalDecisionSupportCard
+                            key={c.uuid}
+                            card={c}
+                            patient={patient}
+                            hideAssessmentCard={hideAssessmentCard}
+                        />
                     ))}
                 </>
             )}
@@ -90,7 +116,15 @@ function ClinicalDecisionSupportServiceCard({ hook, patient }: ClinicalDecisionS
     );
 }
 
-function ClinicalDecisionSupportCard({ card, patient }: { card: CDSResponse; patient: Patient }) {
+function ClinicalDecisionSupportCard({
+    card,
+    patient,
+    hideAssessmentCard,
+}: {
+    card: CDSResponse;
+    patient: Patient;
+    hideAssessmentCard: (encounterId: string, assessmentType: string) => void;
+}) {
     const getIndicatorColor = (indicator: string) => {
         switch (indicator.toLowerCase()) {
             case 'info':
@@ -106,6 +140,9 @@ function ClinicalDecisionSupportCard({ card, patient }: { card: CDSResponse; pat
         }
     };
 
+    const encounterId = card.source?.url?.split('/')[1];
+    const assessmentType = card.assessmentType || '';
+
     return (
         <Card
             title={
@@ -116,6 +153,13 @@ function ClinicalDecisionSupportCard({ card, patient }: { card: CDSResponse; pat
             }
             style={{ marginBottom: '16px' }}
             size="small"
+            extra={
+                encounterId ? (
+                    <Button type="default" onClick={() => hideAssessmentCard(encounterId, assessmentType)}>
+                        {t`Hide`}
+                    </Button>
+                ) : null
+            }
         >
             <Typography.Paragraph style={{ margin: 0 }}>
                 {card.detail}
