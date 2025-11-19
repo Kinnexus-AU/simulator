@@ -1,6 +1,7 @@
 import { t } from '@lingui/macro';
 import { Card, Tag, Typography, Button } from 'antd';
 import { Patient } from 'fhir/r4b';
+import moment from 'moment';
 import { useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -13,7 +14,7 @@ import { useLaunchApp } from '@beda.software/emr/dist/containers/PatientDetails/
 import { service } from '@beda.software/emr/services';
 import { sharedAuthorizedPractitioner } from '@beda.software/emr/sharedState';
 import config from '@beda.software/emr-config';
-import { useService, RenderRemoteData } from '@beda.software/fhir-react';
+import { useService, RenderRemoteData, formatFHIRDateTime } from '@beda.software/fhir-react';
 
 interface CDSHook {
     hook: string;
@@ -83,16 +84,24 @@ function ClinicalDecisionSupportServiceCard({ hook, patient }: ClinicalDecisionS
     );
 
     const hideAssessmentCard = useCallback(
-        (encounterId: string, assessmentType: string) => {
-            service<{ taskId: string }>({
+        (cardId: string) => {
+            service({
                 baseURL: config.CDSBaseUrl,
-                url: `cds-services/hide-assessment-card`,
+                url: `cds-services/${hook.id}/feedback`,
                 method: 'POST',
-                data: { encounterId, assessmentType },
+                data: {
+                    feedback: [
+                        {
+                            card: cardId,
+                            outcome: 'overridden',
+                            outcomeTimestamp: formatFHIRDateTime(moment()),
+                        },
+                    ],
+                },
             });
             manager.softReloadAsync();
         },
-        [manager],
+        [hook.id, manager],
     );
 
     return (
@@ -123,7 +132,7 @@ function ClinicalDecisionSupportCard({
 }: {
     card: CDSResponse;
     patient: Patient;
-    hideAssessmentCard: (encounterId: string, assessmentType: string) => void;
+    hideAssessmentCard: (cardId: string) => void;
 }) {
     const getIndicatorColor = (indicator: string) => {
         switch (indicator.toLowerCase()) {
@@ -141,7 +150,6 @@ function ClinicalDecisionSupportCard({
     };
 
     const encounterId = card.source?.url?.split('/')[1];
-    const assessmentType = card.assessmentType || '';
 
     return (
         <Card
@@ -155,7 +163,7 @@ function ClinicalDecisionSupportCard({
             size="small"
             extra={
                 encounterId ? (
-                    <Button type="default" onClick={() => hideAssessmentCard(encounterId, assessmentType)}>
+                    <Button type="default" onClick={() => hideAssessmentCard(card.uuid)}>
                         {t`Hide`}
                     </Button>
                 ) : null
