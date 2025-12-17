@@ -134,7 +134,7 @@ export function getResourceConfigData<T extends AvailableResourceTypes, RCM exte
                     render: makeRenderer(encounterAdmitSource, renderColumnMode),
                 },
                 {
-                    title: `end`,
+                    title: `End`,
                     key: 'end',
                     render: makeRenderer(encouterEnd, renderColumnMode),
                 },
