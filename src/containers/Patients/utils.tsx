@@ -1,69 +1,64 @@
-import { formatFHIRDate } from 'aidbox-react/lib/utils/date';
-
-import { SearchParams } from '@beda.software/fhir-react';
-
 import {
     AlertOutlined,
     CheckOutlined,
+    ContactsOutlined,
+    ExceptionOutlined,
     ExperimentOutlined,
     HeartOutlined,
     MedicineBoxOutlined,
     SubnodeOutlined,
     UsergroupAddOutlined,
-    ExceptionOutlined,
-    ContactsOutlined,
 } from '@ant-design/icons';
 import {
     AllergyIntolerance,
     Bundle,
     Condition,
+    Encounter,
     Immunization,
+    MedicationRequest,
     MedicationStatement,
     Observation,
+    Patient,
     Procedure,
     RelatedPerson,
-    MedicationRequest,
-    Encounter,
-    Patient,
 } from 'fhir/r4b';
 
+import { formatFHIRDate } from 'aidbox-react/lib/utils/date';
+
 import type { OverviewCard } from '@beda.software/emr/dist/containers/PatientDetails/PatientOverviewDynamic/components/StandardCard/types';
+import { SearchParams } from '@beda.software/fhir-react';
 
 import {
-    makeRenderer,
-    allergyName,
     allergyDate,
-    conditionName,
+    allergyName,
+    birthDate,
     conditionDate,
-    observationName,
-    observationDate,
-    observationValue,
-    immunizationVaccine,
-    immunizationDate,
-    msMedication,
-    msDosage,
-    msDate,
-    procedureTitle,
-    procedureDate,
-    rpName,
-    rpRelationShip,
-    mrName,
-    mrReason,
-    mrDosage,
-    mrStatus,
-    encouterStart,
-    encouterEnd,
-    encouterStatus,
+    conditionName,
     encounterAdmitSource,
     encounterDischargeDisposition,
-    birthDate,
-    patientSex,
+    encouterEnd,
+    encouterStart,
+    encouterStatus,
+    immunizationDate,
+    immunizationVaccine,
+    mrDosage,
+    mrName,
+    mrReason,
+    mrStatus,
+    msDate,
+    msDosage,
+    msMedication,
+    observationDate,
+    observationName,
+    observationValue,
     patientMedicare,
+    patientSex,
+    procedureDate,
+    procedureTitle,
+    rpName,
+    rpRelationShip,
 } from './resourceDataGetters';
-
-
-import { AvailableResourceTypesStr, MapResourceConfigType, UberListRT, DashboardRT, AvailableResourceTypes } from './types';
-
+import { AvailableResourceTypesStr, MapResourceConfigType, ResourceByKey } from './types';
 
 export function getPatientSearchParamsForPractitioner(practitionerId: string): SearchParams {
     return {
@@ -75,10 +70,7 @@ export function getPatientSearchParamsForPractitioner(practitionerId: string): S
     };
 }
 
-export function getResourceConfigData<T extends AvailableResourceTypes, RCM extends 'uberList' | 'dashboard'>(
-    key: AvailableResourceTypesStr,
-    renderColumnMode: RCM,
-): typeof renderColumnMode extends 'uberList' ? UberListRT<T> : DashboardRT<T> {
+export function getResourceConfigData<K extends AvailableResourceTypesStr>(key: K): MapResourceConfigType[K] {
     const mapResourceConfigs: MapResourceConfigType = {
         AllergyIntolerance: {
             title: 'Allergies',
@@ -87,29 +79,29 @@ export function getResourceConfigData<T extends AvailableResourceTypes, RCM exte
                 {
                     title: `Name`,
                     key: 'name',
-                    render: makeRenderer(allergyName, renderColumnMode),
+                    render: allergyName,
                 },
                 {
                     title: `Date`,
                     key: 'date',
-                    render: makeRenderer(allergyDate, renderColumnMode),
+                    render: allergyDate,
                     width: 120,
                 },
             ],
         },
-       Condition: {
+        Condition: {
             title: 'Conditions',
             icon: <AlertOutlined />,
             columns: [
                 {
                     title: `Name`,
                     key: 'name',
-                    render: makeRenderer(conditionName, renderColumnMode),
+                    render: conditionName,
                 },
                 {
                     title: `Date`,
                     key: 'date',
-                    render: makeRenderer(conditionDate, renderColumnMode),
+                    render: conditionDate,
                     width: 120,
                 },
             ],
@@ -121,27 +113,27 @@ export function getResourceConfigData<T extends AvailableResourceTypes, RCM exte
                 {
                     title: `Status`,
                     key: 'status',
-                    render: makeRenderer(encouterStatus, renderColumnMode),
+                    render: encouterStatus,
                 },
                 {
                     title: `Start`,
                     key: 'start',
-                    render: makeRenderer(encouterStart, renderColumnMode),
+                    render: encouterStart,
                 },
                 {
                     title: `Source of admission`,
                     key: 'source',
-                    render: makeRenderer(encounterAdmitSource, renderColumnMode),
+                    render: encounterAdmitSource,
                 },
                 {
                     title: `end`,
                     key: 'end',
-                    render: makeRenderer(encouterEnd, renderColumnMode),
+                    render: encouterEnd,
                 },
                 {
                     title: `Residential/living status after discharge`,
                     key: 'discharge',
-                    render: makeRenderer(encounterDischargeDisposition, renderColumnMode),
+                    render: encounterDischargeDisposition,
                 },
             ],
         },
@@ -152,18 +144,18 @@ export function getResourceConfigData<T extends AvailableResourceTypes, RCM exte
                 {
                     title: `Name`,
                     key: 'name',
-                    render: makeRenderer(observationName, renderColumnMode),
+                    render: observationName,
                     width: 200,
                 },
                 {
                     title: `Date`,
                     key: 'date',
-                    render: makeRenderer(observationDate, renderColumnMode),
+                    render: observationDate,
                 },
                 {
                     title: `Value`,
                     key: 'value',
-                    render: makeRenderer(observationValue, renderColumnMode),
+                    render: observationValue,
                 },
             ],
         },
@@ -174,12 +166,12 @@ export function getResourceConfigData<T extends AvailableResourceTypes, RCM exte
                 {
                     title: `Vaccine`,
                     key: 'vaccine',
-                    render: makeRenderer(immunizationVaccine, renderColumnMode),
+                    render: immunizationVaccine,
                 },
                 {
                     title: `Date`,
                     key: 'date',
-                    render: makeRenderer(immunizationDate, renderColumnMode),
+                    render: immunizationDate,
                     width: 120,
                 },
             ],
@@ -191,17 +183,17 @@ export function getResourceConfigData<T extends AvailableResourceTypes, RCM exte
                 {
                     title: `Medication`,
                     key: 'medication',
-                    render: makeRenderer(msMedication, renderColumnMode),
+                    render: msMedication,
                 },
                 {
                     title: 'Dosage',
                     key: 'dosage',
-                    render: makeRenderer(msDosage, renderColumnMode),
+                    render: msDosage,
                 },
                 {
                     title: `Date`,
                     key: 'date',
-                    render: makeRenderer(msDate, renderColumnMode),
+                    render: msDate,
                     width: 120,
                 },
             ],
@@ -213,20 +205,18 @@ export function getResourceConfigData<T extends AvailableResourceTypes, RCM exte
                 {
                     title: 'Birth date',
                     key: 'birthdate',
-                    render: makeRenderer(birthDate, renderColumnMode),
+                    render: birthDate,
                 },
                 {
                     title: 'Sex',
                     key: 'sex',
-                    render: makeRenderer(patientSex, renderColumnMode),
+                    render: patientSex,
                 },
                 {
                     title: 'Medicare',
                     key: 'medicare',
-                    render: makeRenderer(patientMedicare, renderColumnMode),
+                    render: patientMedicare,
                 },
-
-
             ],
         },
         Procedure: {
@@ -236,12 +226,12 @@ export function getResourceConfigData<T extends AvailableResourceTypes, RCM exte
                 {
                     title: `Title`,
                     key: 'title',
-                    render: makeRenderer(procedureTitle, renderColumnMode),
+                    render: procedureTitle,
                 },
                 {
                     title: `Date`,
                     key: 'date',
-                    render: makeRenderer(procedureDate, renderColumnMode),
+                    render: procedureDate,
                     width: 120,
                 },
             ],
@@ -253,12 +243,12 @@ export function getResourceConfigData<T extends AvailableResourceTypes, RCM exte
                 {
                     title: `Name`,
                     key: 'name',
-                    render: makeRenderer(rpName, renderColumnMode),
+                    render: rpName,
                 },
                 {
                     title: `Relationship`,
                     key: 'relationship',
-                    render: makeRenderer(rpRelationShip, renderColumnMode),
+                    render: rpRelationShip,
                     width: 120,
                 },
             ],
@@ -270,37 +260,37 @@ export function getResourceConfigData<T extends AvailableResourceTypes, RCM exte
                 {
                     title: 'Name',
                     key: 'name',
-                    render: makeRenderer(mrName, renderColumnMode),
+                    render: mrName,
                 },
                 {
                     title: 'Reason',
                     key: 'reason',
-                    render: makeRenderer(mrReason, renderColumnMode),
+                    render: mrReason,
                 },
                 {
                     title: 'Dosage',
                     key: 'date',
-                    render: makeRenderer(mrDosage, renderColumnMode),
+                    render: mrDosage,
                     width: 200,
                 },
                 {
                     title: 'Status',
                     key: 'status',
-                    render: makeRenderer(mrStatus, renderColumnMode),
+                    render: mrStatus,
                 },
             ],
         },
     };
 
-    return mapResourceConfigs[key] as any;
+    return mapResourceConfigs[key];
 }
 
-function prepareResource<T extends AvailableResourceTypes>(
-    resources: T[],
-    bundle: Bundle<T>,
-    key: AvailableResourceTypesStr,
-): OverviewCard<T> {
-    const { title, columns, icon } = getResourceConfigData(key, 'dashboard');
+function prepareResource<K extends AvailableResourceTypesStr>(
+    resources: ResourceByKey[K][],
+    bundle: Bundle<ResourceByKey[K]>,
+    key: K,
+): OverviewCard<ResourceByKey[K]> {
+    const { title, columns, icon } = getResourceConfigData(key);
 
     return {
         title: title,
@@ -316,13 +306,11 @@ function prepareResource<T extends AvailableResourceTypes>(
 export const prepareAllergies = (
     r: AllergyIntolerance[],
     bundle: Bundle<AllergyIntolerance>,
-): OverviewCard<AllergyIntolerance> => prepareResource<AllergyIntolerance>(r, bundle, 'AllergyIntolerance');
+): OverviewCard<AllergyIntolerance> => prepareResource(r, bundle, 'AllergyIntolerance');
 export const prepareConditions = (r: Condition[], bundle: Bundle<Condition>): OverviewCard<Condition> =>
     prepareResource(r, bundle, 'Condition');
-export const prepareEncounters = (
-    r: Encounter[],
-    bundle: Bundle<Encounter>,
-): OverviewCard<Encounter> => prepareResource(r, bundle, 'Encounter');
+export const prepareEncounters = (r: Encounter[], bundle: Bundle<Encounter>): OverviewCard<Encounter> =>
+    prepareResource(r, bundle, 'Encounter');
 export const prepareObservations = (r: Observation[], bundle: Bundle<Observation>): OverviewCard<Observation> =>
     prepareResource(r, bundle, 'Observation');
 export const prepareImmunizations = (r: Immunization[], bundle: Bundle<Immunization>): OverviewCard<Immunization> =>
@@ -331,10 +319,8 @@ export const prepareMedicationStatements = (
     r: MedicationStatement[],
     bundle: Bundle<MedicationStatement>,
 ): OverviewCard<MedicationStatement> => prepareResource(r, bundle, 'MedicationStatement');
-export const preparePatient = (
-    r: Patient[],
-    bundle: Bundle<Patient>,
-): OverviewCard<Patient> => prepareResource(r, bundle, 'Patient');
+export const preparePatient = (r: Patient[], bundle: Bundle<Patient>): OverviewCard<Patient> =>
+    prepareResource(r, bundle, 'Patient');
 export const prepareProcedures = (r: Procedure[], bundle: Bundle<Procedure>): OverviewCard<Procedure> =>
     prepareResource(r, bundle, 'Procedure');
 export const prepareRelatedPersons = (r: RelatedPerson[], bundle: Bundle<RelatedPerson>): OverviewCard<RelatedPerson> =>
@@ -343,4 +329,3 @@ export const prepareMedicationRequests = (
     r: MedicationRequest[],
     bundle: Bundle<MedicationRequest>,
 ): OverviewCard<MedicationRequest> => prepareResource(r, bundle, 'MedicationRequest');
-

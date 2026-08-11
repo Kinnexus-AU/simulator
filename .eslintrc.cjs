@@ -24,7 +24,7 @@ module.exports = {
         ecmaVersion: 'latest',
         sourceType: 'module',
     },
-    ignorePatterns: ['.eslintrc.cjs'],
+    ignorePatterns: ['.eslintrc.cjs', 'src/locale'],
     plugins: ['react', '@typescript-eslint', 'react-refresh', 'prettier', 'import', 'string-to-lingui'],
     settings: {
         'import/parsers': {

@@ -1,8 +1,9 @@
-import type { Dashboard, DashboardInstance } from '@beda.software/emr/dist/components/Dashboard/types';
-import { CDSCards } from './cds-cards';
-import { StandardCardContainerFabric } from '@beda.software/emr/dist/containers/PatientDetails/PatientOverviewDynamic/containers/StandardCardContainerFabric/index';
 import { Patient } from 'fhir/r4b';
 
+import type { Dashboard, DashboardInstance } from '@beda.software/emr/dist/components/Dashboard/types';
+import { StandardCardContainerFabric } from '@beda.software/emr/dist/containers/PatientDetails/PatientOverviewDynamic/containers/StandardCardContainerFabric/index';
+
+import { CDSCards } from './cds-cards';
 import {
     prepareAllergies,
     prepareEncounters,
@@ -11,8 +12,6 @@ import {
     preparePatient,
     prepareRelatedPersons,
 } from './utils';
-
-
 
 const patientDashboardConfig: DashboardInstance = {
     top: [
@@ -39,31 +38,31 @@ const patientDashboardConfig: DashboardInstance = {
                 }),
             },
             widget: StandardCardContainerFabric(prepareEncounters),
-        }
+        },
     ],
-    left: [{
-        query: {
-            resourceType: 'AllergyIntolerance',
-            search: (patient: Patient) => ({
-                patient: patient.id,
-                _sort: '-date',
-                _count: 7,
-            }),
+    left: [
+        {
+            query: {
+                resourceType: 'AllergyIntolerance',
+                search: (patient: Patient) => ({
+                    patient: patient.id,
+                    _sort: '-date',
+                    _count: 7,
+                }),
+            },
+            widget: StandardCardContainerFabric(prepareAllergies),
         },
-        widget: StandardCardContainerFabric(prepareAllergies),
-    },
-    {
-        query: {
-            resourceType: 'Immunization',
-            search: (patient: Patient) => ({
-                patient: patient.id,
-                _sort: '-date',
-                _count: 7,
-            }),
+        {
+            query: {
+                resourceType: 'Immunization',
+                search: (patient: Patient) => ({
+                    patient: patient.id,
+                    _sort: '-date',
+                    _count: 7,
+                }),
+            },
+            widget: StandardCardContainerFabric(prepareImmunizations),
         },
-        widget: StandardCardContainerFabric(prepareImmunizations),
-    },
-
     ],
     right: [
         {
@@ -87,10 +86,9 @@ const patientDashboardConfig: DashboardInstance = {
             },
             widget: StandardCardContainerFabric(prepareRelatedPersons),
         },
-
     ],
     bottom: [],
-}
+};
 
 export const dashboard: Dashboard = {
     default: patientDashboardConfig,

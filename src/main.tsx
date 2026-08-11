@@ -1,12 +1,11 @@
 import { i18n } from '@lingui/core';
 import { t } from '@lingui/macro';
 import { I18nProvider } from '@lingui/react';
+import { Coding } from 'fhir/r4b';
 import React, { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Route } from 'react-router-dom';
 
-import { MenuLayout } from '@beda.software/emr/dist/components/BaseLayout/Sidebar/SidebarTop/context';
-import { PatientsIcon } from '@beda.software/emr/icons';
 import '@beda.software/emr/dist/services/initialize';
 import 'antd/dist/reset.css';
 import '@beda.software/emr/dist/style.css';
@@ -16,15 +15,14 @@ import '@beda.software/emr/dist/style.css';
 
 // You can specify your own theme to ajdust color,
 // Use you https://github.com/beda-software/fhir-emr/blob/master/src/theme/ThemeProvider.tsx as example
-import { App } from '@beda.software/emr/containers';
+import { EMR, SignIn, SetPassword } from '@beda.software/emr/containers';
 import { ValueSetExpandProvider } from '@beda.software/emr/contexts';
-
-import { dynamicActivate, getCurrentLocale } from './services/i18n';
-import { PatientList, PatientDetails } from './containers/Patients';
-import { isSuccess } from '@beda.software/remote-data';
+import { PatientsIcon } from '@beda.software/emr/icons';
 import { expandExternalTerminology } from '@beda.software/emr/services';
-import { Coding } from 'fhir/r4b';
+import { isSuccess } from '@beda.software/remote-data';
 
+import { PatientList, PatientDetails } from './containers/Patients';
+import { dynamicActivate, getCurrentLocale } from './services/i18n';
 import { ThemeProvider } from './theme';
 
 const menu = () => [{ label: t`Residents`, path: '/patients', icon: <PatientsIcon /> }]
@@ -59,17 +57,22 @@ export const AppWithContext = () => {
         <I18nProvider i18n={i18n}>
             <ThemeProvider>
                 <ValueSetExpandProvider.Provider value={expandEMRValueSet}>
-                    <MenuLayout.Provider value={menu}>
-                        <App
-                            authenticatedRoutes={
-                                <>
-                                    <Route path="/patients" element={<PatientList />} />
-                                    <Route path="/patients/:id" element={<PatientDetails />} />
-                                    <Route path="/patients/:id/*" element={<PatientDetails />} />
-                                </>
-                            }
-                        />
-                    </MenuLayout.Provider>
+                    <EMR
+                        menuLayout={menu}
+                        authenticatedRoutes={
+                            <>
+                                <Route path="/patients" element={<PatientList />} />
+                                <Route path="/patients/:id" element={<PatientDetails />} />
+                                <Route path="/patients/:id/*" element={<PatientDetails />} />
+                            </>
+                        }
+                        anonymousRoutes={
+                            <>
+                                <Route path="/signin" element={<SignIn originPathName={window.location.pathname} />} />
+                                <Route path="/reset-password/:code" element={<SetPassword />} />
+                            </>
+                        }
+                    />
                 </ValueSetExpandProvider.Provider>
             </ThemeProvider>
         </I18nProvider>

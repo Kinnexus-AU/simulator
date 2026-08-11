@@ -1,11 +1,11 @@
 import { t } from '@lingui/macro';
-import { Card, Tag, Typography, Button } from 'antd';
+import { Button, Card, Tag, Typography } from 'antd';
 import { Patient } from 'fhir/r4b';
 import moment from 'moment';
 import { useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { getFHIRResources as getAidboxResources, extractBundleResources } from 'aidbox-react/lib/services/fhir';
+import { extractBundleResources, getFHIRResources as getAidboxResources } from 'aidbox-react/lib/services/fhir';
 import { mapSuccess } from 'aidbox-react/lib/services/service';
 
 import { Client } from '@beda.software/aidbox-types';
@@ -14,7 +14,7 @@ import { useLaunchApp } from '@beda.software/emr/dist/containers/PatientDetails/
 import { service } from '@beda.software/emr/services';
 import { sharedAuthorizedPractitioner } from '@beda.software/emr/sharedState';
 import config from '@beda.software/emr-config';
-import { useService, RenderRemoteData, formatFHIRDateTime } from '@beda.software/fhir-react';
+import { formatFHIRDateTime, RenderRemoteData, useService } from '@beda.software/fhir-react';
 
 interface CDSHook {
     hook: string;
