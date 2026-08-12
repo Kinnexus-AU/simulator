@@ -12,13 +12,26 @@ jobs:
       packages: write
     env:
       REGISTRY: ghcr.io
-      DISABLE_ESLINT_PLUGIN: true
       NODE_OPTIONS: --max-old-space-size=4096
+      TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2,ghcr.io/aquasecurity/trivy-db:2
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           submodules: recursive
-      - uses: actions/setup-node@v4
+      - name: Scan dependencies with Trivy
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          version: v0.73.0 # not bumped by Dependabot — recheck when trivy-action updates
+          scan-type: fs
+          scan-ref: .
+          scanners: vuln
+          # the artifact resolves deps via the ROOT yarn.lock (workspace);
+          # the submodule's own lockfile only serves upstream standalone builds
+          skip-files: contrib/fhir-emr/yarn.lock
+          exit-code: "1"
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 20
       - name: Prepare config
@@ -29,12 +42,11 @@ jobs:
       - run: yarn compile
       - run: yarn build
       - name: Setup QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3.7.0
       - name: Setup Docker builder
-        uses: docker/setup-buildx-action@v3
-      - run: docker run --rm --privileged tonistiigi/binfmt --install all
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
       - name: Login to Docker registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -46,10 +58,39 @@ jobs:
         shell: bash
         run: echo "branch=$(echo ${GITHUB_REF#refs/tags/v})" >>$GITHUB_OUTPUT
         id: extract_branch
+      - name: Build amd64 image for scanning
+        uses: docker/build-push-action@ca052bb54ab0790a636c9b5f226502c73d547a25 # v5.4.0
+        with:
+          context: .
+          load: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:scan
+      - name: Scan image with Trivy
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          version: v0.73.0 # not bumped by Dependabot — recheck when trivy-action updates
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:scan
+          exit-code: "1"
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
       - name: Build and push the Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@ca052bb54ab0790a636c9b5f226502c73d547a25 # v5.4.0
         with:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.extract_branch.outputs.branch }}
+          sbom: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.extract_branch.outputs.branch }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+      - name: Generate SBOM with Trivy
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          version: v0.73.0 # not bumped by Dependabot — recheck when trivy-action updates
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:scan
+          format: cyclonedx
+          output: sbom.cdx.json
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: sbom-${{ steps.extract_branch.outputs.branch }}
+          path: sbom.cdx.json
