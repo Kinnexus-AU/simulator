@@ -1,0 +1,33 @@
+name: Lint and type-check
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      NODE_OPTIONS: --max-old-space-size=4096
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 20
+          cache: yarn
+      - name: Prepare config
+        run: cp contrib/emr-config/config.local.js contrib/emr-config/config.js
+      - name: Install deps
+        run: yarn install --network-concurrency 1
+      - name: ESLint
+        run: yarn lint
+      - name: Typecheck
+        run: yarn typecheck
