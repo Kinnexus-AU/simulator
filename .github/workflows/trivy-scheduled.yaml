@@ -1,0 +1,44 @@
+name: Scheduled vulnerability scan
+on:
+  schedule:
+    - cron: "0 1 * * *"
+  workflow_dispatch:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    strategy:
+      fail-fast: false
+      matrix:
+        suffix:
+          - ""
+          - "-seeds"
+        tag:
+          - "0.0.17"
+          - latest
+    env:
+      REGISTRY: ghcr.io
+      TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2,ghcr.io/aquasecurity/trivy-db:2
+    steps:
+      # checkout so the scan honors the repo's .trivyignore
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - name: Login to Docker registry
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: lowercase github.repository
+        run: |
+          echo "IMAGE_NAME=`echo ${{github.repository}} | tr '[:upper:]' '[:lower:]'`" >>${GITHUB_ENV}
+      - name: Scan published image with Trivy
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          version: v0.73.0 # not bumped by Dependabot — recheck when trivy-action updates
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ matrix.suffix }}:${{ matrix.tag }}
+          exit-code: "1"
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true

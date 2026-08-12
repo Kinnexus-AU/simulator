@@ -1,0 +1,36 @@
+# TEMPORARY — scanner limitation, not accepted product risk.
+#
+# All entries below are devDependencies (build/test tooling) that never ship in
+# the runtime bundle. Trivy fails to exclude dev dependencies for this repo:
+# the yarn workspace walker aborts on wildcard version specs
+# ("@types/node": "*", requested by vitest and @jest/types) and then counts
+# every devDependency as production-reachable. Reproduced with trivy v0.73.0:
+# WARN [yarn] Unable to parse package.json to remove dev dependencies
+#   err="unable to resolve workspace dependencies: ... unable to match version
+#   for @types/node"
+#
+# Remove this file once trivy's dev-dependency classification handles wildcard
+# specs in yarn workspaces — the gate should then report these as dev-only on
+# its own. Re-verify with: trivy fs . (warning "Unable to parse package.json to
+# remove dev dependencies" must be gone).
+
+# vite (build tool; fix requires a 4.x -> 5.x+ major upgrade)
+CVE-2024-52011
+CVE-2026-53571
+# vitest (test runner, workspace devDep)
+CVE-2026-47429
+# playwright (via @storybook/test-runner)
+CVE-2025-59288
+# tmp (via @lingui/cli -> inquirer -> external-editor)
+CVE-2026-44705
+CVE-2026-49982
+# glob (lingui/storybook toolchains)
+CVE-2025-64756
+# minimatch (pinned exact by @microsoft/api-extractor)
+CVE-2026-26996
+CVE-2026-27903
+CVE-2026-27904
+# brace-expansion (under minimatch 9 in dev toolchains)
+CVE-2026-13149
+CVE-2026-14257
+CVE-2026-69152
