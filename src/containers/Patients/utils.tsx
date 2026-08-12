@@ -126,7 +126,7 @@ export function getResourceConfigData<K extends AvailableResourceTypesStr>(key: 
                     render: encounterAdmitSource,
                 },
                 {
-                    title: `end`,
+                    title: `End`,
                     key: 'end',
                     render: encouterEnd,
                 },
