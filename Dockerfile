@@ -1,4 +1,4 @@
-FROM node:24-slim
+FROM node:26-slim
 
 RUN yarn global add serve \
     && rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx /opt/yarn*
