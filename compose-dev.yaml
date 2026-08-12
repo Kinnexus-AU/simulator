@@ -4,7 +4,7 @@ include:
 
 services:
   build-seeds-dev:
-    image: bedasoftware/fhirsnake:latest
+    image: bedasoftware/fhirsnake:latest@sha256:cc98b6ba1488da4c1c9f0a45e1ee2da8700451d13151a6946a55e0832f3bab35
     command:
       - export
       - --output
@@ -20,7 +20,7 @@ services:
       - env/dev-seeds
 
   watch-seeds-dev:
-    image: bedasoftware/fhirsnake:latest
+    image: bedasoftware/fhirsnake:latest@sha256:cc98b6ba1488da4c1c9f0a45e1ee2da8700451d13151a6946a55e0832f3bab35
     command:
       - watch
       - --external-fhir-server-url
@@ -36,7 +36,7 @@ services:
         condition: service_healthy
 
   upload-seeds-demo-bundle:
-    image: curlimages/curl
+    image: curlimages/curl:8.7.1@sha256:25d29daeb9b14b89e2fa8cc17c70e4b188bca1466086907c2d9a4b56b59d8e21
     links:
       - aidbox
     depends_on:

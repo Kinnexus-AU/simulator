@@ -28,7 +28,7 @@ spec:
     host: aidbox.simulator.kinnexus.beda.software
     protocol: https
     image:
-      tag: edge
+      tag: "2606.2@sha256:7f9c8553897d351e1bae808900eac1ea5081713d3502e8e8b014b250f4a78d83"
     config:
       BOX_FHIR_CREATEDAT_URL: https://aidbox.app/ex/createdAt
       BOX_BOOTSTRAP_FHIR_PACKAGES: "hl7.fhir.r4.core#4.0.1"
@@ -61,7 +61,7 @@ spec:
           sizeLimit: "64k"
     initContainers:
     - name: setup-database-certificates
-      image: alpine:3.6
+      image: alpine:3.6@sha256:66790a2b79e1ea3e1dabac43990c54aca5d1ddf268d9a5a0285e4167c8b24475
       command:
       - sh
       - -c

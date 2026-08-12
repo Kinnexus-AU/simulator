@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: converter-simulator
-        image: bedasoftware/aidbox-fhir-converter:main
+        image: bedasoftware/aidbox-fhir-converter:main@sha256:13604a3414d04bae77ed77f8fe1bdc1007dfa1edcf71733f5ab370f7635870d3
         imagePullPolicy: Always
         resources:
           requests:

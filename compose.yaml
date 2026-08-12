@@ -1,6 +1,6 @@
 services:
   aidbox:
-    image: healthsamurai/aidboxone:stable
+    image: healthsamurai/aidboxone:2606.2@sha256:7f9c8553897d351e1bae808900eac1ea5081713d3502e8e8b014b250f4a78d83
     depends_on:
       - aidbox-db
     links:
@@ -24,13 +24,13 @@ services:
       retries: 100
       test: curl --fail http://aidbox:8080/health || exit 1
   aidbox-db:
-    image: "healthsamurai/aidboxdb:16.1"
+    image: "healthsamurai/aidboxdb:16.1@sha256:12bfd0a801138262c51fc65fdf961d6b09799f7a6f6da6860f10cff8dcda7a76"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: aidbox
   sdc:
-    image: bedasoftware/fhir-sdc:1.0.0a17
+    image: bedasoftware/fhir-sdc:2.1.0a6@sha256:008a4a3867ad01a11bbd85f7fab5ff910d5240477e463985330be9abe8c99154
     depends_on:
       aidbox:
         condition: service_healthy
@@ -40,14 +40,14 @@ services:
       - ./env/sdc
     tty: true
   fhir-converters-app:
-    image: bedasoftware/aidbox-fhir-converter:main
+    image: bedasoftware/aidbox-fhir-converter:main@sha256:13604a3414d04bae77ed77f8fe1bdc1007dfa1edcf71733f5ab370f7635870d3
     depends_on:
       aidbox:
         condition: service_healthy
     env_file:
       - ./env/fhir-converters-app
   build-seeds:
-    image: bedasoftware/fhirsnake:latest
+    image: bedasoftware/fhirsnake:latest@sha256:cc98b6ba1488da4c1c9f0a45e1ee2da8700451d13151a6946a55e0832f3bab35
     command:
       - export
       - --output
@@ -62,7 +62,7 @@ services:
     env_file:
       - env/seeds
   watch-seeds:
-    image: bedasoftware/fhirsnake:latest
+    image: bedasoftware/fhirsnake:latest@sha256:cc98b6ba1488da4c1c9f0a45e1ee2da8700451d13151a6946a55e0832f3bab35
     command:
       - watch
       - --external-fhir-server-url
@@ -77,14 +77,14 @@ services:
       questionnaire-fce-fhir-converter:
         condition: service_healthy
   questionnaire-fce-fhir-converter:
-    image: bedasoftware/questionnaire-fce-fhir-converter:latest
+    image: bedasoftware/questionnaire-fce-fhir-converter:latest@sha256:dc494d69abc0aeb9032f08f47a2d8e647638439c19fa153fb75e4fb9690dafb3
     healthcheck:
       test: curl --fail http://localhost:3000/health || exit 1
       interval: 5s
       timeout: 30s
       retries: 50
   sdc-ide:
-    image: bedasoftware/sdc-ide:master
+    image: bedasoftware/sdc-ide:master@sha256:56ea4786ebef3253a50d78f6a7ae014f8dc29b4c9e7737668ddba3b28c4738d3
     depends_on:
       aidbox:
         condition: service_healthy
@@ -93,10 +93,10 @@ services:
     env_file:
       - ./env/sdc-ide
   jute:
-    image: bedasoftware/jute-microservice:latest
+    image: bedasoftware/jute-microservice:latest@sha256:1545395dbd8c3291208520c3d57a9dc8c7e81022a83672b1c7e23dc589463517
     ports:
       - "8099:8090"
   fhirpath_mapping:
-    image: bedasoftware/fhirpath-extract:0.2.0
+    image: bedasoftware/fhirpath-extract:0.2.0@sha256:2af9bcbce54ba04238c3705c4629276f7578abb111be9317e2a1421972433d02
     ports:
       - "8091:8090"

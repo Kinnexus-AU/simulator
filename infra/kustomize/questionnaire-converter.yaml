@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: questionnaire-converter
-        image: bedasoftware/questionnaire-fce-fhir-converter:latest
+        image: bedasoftware/questionnaire-fce-fhir-converter:latest@sha256:dc494d69abc0aeb9032f08f47a2d8e647638439c19fa153fb75e4fb9690dafb3
         imagePullPolicy: Always
         resources:
           requests:
