@@ -21,6 +21,7 @@ import { PatientsIcon } from '@beda.software/emr/icons';
 import { expandExternalTerminology } from '@beda.software/emr/services';
 import { isSuccess } from '@beda.software/remote-data';
 
+import { AppFooter } from './components/AppFooter';
 import { PatientList, PatientDetails } from './containers/Patients';
 import { dynamicActivate, getCurrentLocale } from './services/i18n';
 import { ThemeProvider } from './theme';
@@ -59,6 +60,7 @@ export const AppWithContext = () => {
                 <ValueSetExpandProvider.Provider value={expandEMRValueSet}>
                     <EMR
                         menuLayout={menu}
+                        footer={<AppFooter />}
                         authenticatedRoutes={
                             <>
                                 <Route path="/patients" element={<PatientList />} />

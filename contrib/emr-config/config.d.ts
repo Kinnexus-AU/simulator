@@ -6,6 +6,7 @@ declare const config: {
     wearablesAccessConsentCodingSystem: string;
 
     tier: string;
+    version?: string;
     baseURL: string;
     CDSBaseUrl: string;
     fhirBaseURL?: string;

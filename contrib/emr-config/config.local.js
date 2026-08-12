@@ -5,6 +5,7 @@ const config = {
     wearablesAccessConsentCodingSystem: 'https://fhir.emr.beda.software/CodeSystem/consent-subject',
 
     tier: 'develop',
+    version: import.meta.env.VITE_APP_VERSION,
     baseURL: 'http://localhost:8080',
     CDSBaseUrl: 'http://localhost:8000',
     sdcIdeUrl: 'http://localhost:3001',
