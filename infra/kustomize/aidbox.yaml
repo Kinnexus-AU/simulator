@@ -61,7 +61,7 @@ spec:
           sizeLimit: "64k"
     initContainers:
     - name: setup-database-certificates
-      image: alpine:3.6@sha256:66790a2b79e1ea3e1dabac43990c54aca5d1ddf268d9a5a0285e4167c8b24475
+      image: alpine:3.24.1@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
       command:
       - sh
       - -c
