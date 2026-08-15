@@ -1,0 +1,47 @@
+# Accepted risks for the seeds image ONLY (ghcr.io/kinnexus-au/simulator-seeds,
+# base bedasoftware/fhirsnake@sha256:cc98b6ba... — upstream's newest build,
+# pushed 2026-07-29). Applied via the `trivyignores` input in seeds.yaml and
+# trivy-scheduled.yaml; never merge these entries into the shared .trivyignore:
+# the same packages are reachable in other scan targets.
+#
+# Justification (execution profile, not absence of the flaw): the image runs
+# solely as the `interpolate-init-bundle` init container
+# (infra/kustomize/aidbox.yaml). It executes `fhirsnake export` over the seed
+# YAML baked into the image plus environment variables, writes
+# /data/initBundle.json, and exits before Aidbox starts. No listening socket
+# (server mode is never invoked), no untrusted input. Its only network I/O is
+# outbound to the first-party in-cluster questionnaire-converter service
+# (digest-pinned, deployed from these same manifests) to convert the seed
+# Questionnaires — no untrusted peers.
+#
+# All flagged packages are fhirsnake's own dependencies with fixes released;
+# fixing them requires an upstream dependency refresh and image rebuild.
+#
+# Remove entries when upstream publishes a rebuilt fhirsnake image and the
+# FROM pin in resources/Dockerfile is bumped: re-run the gate scan and delete
+# whatever no longer fires. Re-triage the whole file if the image's command or
+# usage changes (an external converter URL, watch/server mode, anything beyond
+# the init container).
+
+# h11 (HTTP parsing; reachable only via uvicorn server mode or h11-based
+# clients — fhirsnake's HTTP client is requests)
+CVE-2025-43859
+# starlette (web app serving requests; server.py is only imported by the
+# `server` command, never by `export`)
+CVE-2024-47874
+CVE-2026-48818
+CVE-2026-54283
+# urllib3 (used for the converter calls, but the only peer is the first-party
+# in-cluster questionnaire-converter; the CVEs require a hostile server)
+CVE-2025-66418
+CVE-2025-66471
+CVE-2026-21441
+CVE-2026-44431
+# cryptography, wheel, jaraco.context (poetry/pip install toolchain; nothing
+# is installed at runtime)
+CVE-2026-69247
+CVE-2026-24049
+CVE-2026-23949
+# jq/libjq1 (Debian package; the binary is never invoked by entrypoint.sh or
+# the export path)
+CVE-2026-32316

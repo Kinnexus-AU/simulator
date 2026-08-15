@@ -58,6 +58,7 @@ jobs:
         with:
           version: v0.73.0 # not bumped by Dependabot — recheck when trivy-action updates
           image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-seeds:scan
+          trivyignores: .trivyignore-seeds
           exit-code: "1"
           severity: CRITICAL,HIGH
           ignore-unfixed: true
