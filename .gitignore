@@ -35,3 +35,4 @@ contrib/emr-config/config.js
 storybook-static
 .env
 resources/seeds/initBundle.json
+resources/dev-seeds/initBundle.json
