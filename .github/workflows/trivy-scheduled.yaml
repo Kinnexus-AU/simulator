@@ -17,7 +17,7 @@ jobs:
           - ""
           - "-seeds"
         tag:
-          - "0.0.19"
+          - "0.0.20"
           - latest
     env:
       REGISTRY: ghcr.io
