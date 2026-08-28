@@ -6,13 +6,13 @@ import {
     Immunization,
     MedicationRequest,
     MedicationStatement,
+    Meta,
     Observation,
     ObservationComponent,
     Patient,
     Procedure,
     RelatedPerson,
 } from 'fhir/r4b';
-import { extractExtension } from 'sdc-qrf/dist/converter/index';
 
 import {
     compileAsFirst,
@@ -33,9 +33,15 @@ function getAbsentReason(extension?: Array<Extension>) {
     return extension?.find((e) => e.url === 'http://hl7.org/fhir/StructureDefinition/data-absent-reason');
 }
 
+const CREATED_AT_EXTENSION_URLS = ['ex:createdAt', 'https://aidbox.app/ex/createdAt'];
+
+function extractCreatedAt(meta: Meta | undefined) {
+    return meta?.extension?.find((e) => CREATED_AT_EXTENSION_URLS.includes(e.url))?.valueInstant;
+}
+
 export const allergyName = (r: AllergyIntolerance): string => r.code?.text ?? r.code?.coding?.[0]?.display ?? 'Unknown';
 export const allergyDate = (r: AllergyIntolerance): string => {
-    const createdAt = extractExtension(r.meta?.extension, 'ex:createdAt');
+    const createdAt = extractCreatedAt(r.meta);
     const date = r.recordedDate || createdAt || r.meta?.lastUpdated;
 
     return date ? formatHumanDate(date) : 'Unknown';
@@ -57,7 +63,7 @@ export const encounterDischargeDisposition = compileAsFirst<Encounter, string>(
 export const encouterStatus = (e: Encounter): string => e.status ?? 'unknown';
 export const observationName = (r: Observation): string => r.code.text ?? r.code.coding?.[0]?.display ?? 'Unknown';
 export const observationDate = (r: Observation): string => {
-    const createdAt = extractExtension(r.meta?.extension, 'ex:createdAt');
+    const createdAt = extractCreatedAt(r.meta);
     const date = r.effectiveDateTime || r.issued || createdAt;
     if (date) {
         return formatHumanDate(date);
