@@ -1,5 +1,5 @@
 import { Patient } from 'fhir/r4b';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import { PatientDashboardProvider } from '@beda.software/emr/dist/components/Dashboard/contexts';
 import { PatientApps } from '@beda.software/emr/dist/containers/PatientDetails/PatientApps/index';
@@ -34,6 +34,8 @@ const tabs: Array<Tab<WithId<Patient>>> = [
 ];
 
 function Documents({ patient }: { patient: WithId<Patient> }) {
+    const navigate = useNavigate();
+
     return (
         <Routes>
             <Route path="/" element={<PatientDocuments patient={patient} />} />
@@ -42,6 +44,7 @@ function Documents({ patient }: { patient: WithId<Patient> }) {
                 element={
                     <PatientDocument
                         autoSave={true}
+                        onSuccess={() => navigate(-1)}
                         launchContextParameters={[
                             {
                                 name: 'Patient',
