@@ -1,5 +1,6 @@
 FROM node:24-slim
 
+RUN apt-get update && apt-get -y upgrade && rm -rf /var/lib/apt/lists/*
 RUN yarn global add serve \
     && rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx /opt/yarn*
 RUN mkdir /app
