@@ -1,6 +1,6 @@
 # Accepted risks for the seeds image ONLY (ghcr.io/kinnexus-au/simulator-seeds,
-# base bedasoftware/fhirsnake@sha256:cc98b6ba... — upstream's newest build,
-# pushed 2026-07-29). Applied via the `trivyignores` input in seeds.yaml and
+# base bedasoftware/fhirsnake@sha256:a9532fc1... — upstream's newest build,
+# pushed 2026-09-01). Applied via the `trivyignores` input in seeds.yaml and
 # trivy-scheduled.yaml; never merge these entries into the shared .trivyignore:
 # the same packages are reachable in other scan targets.
 #
@@ -14,8 +14,9 @@
 # (digest-pinned, deployed from these same manifests) to convert the seed
 # Questionnaires — no untrusted peers.
 #
-# All flagged packages are fhirsnake's own dependencies with fixes released;
-# fixing them requires an upstream dependency refresh and image rebuild.
+# All flagged packages are fhirsnake's own dependencies, or copies vendored by
+# setuptools and pip, with fixes released; fixing them requires an upstream
+# dependency refresh and image rebuild.
 #
 # Remove entries when upstream publishes a rebuilt fhirsnake image and the
 # FROM pin in resources/Dockerfile is bumped: re-run the gate scan and delete
@@ -37,11 +38,10 @@ CVE-2025-66418
 CVE-2025-66471
 CVE-2026-21441
 CVE-2026-44431
-# cryptography, wheel, jaraco.context (poetry/pip install toolchain; nothing
-# is installed at runtime)
-CVE-2026-69247
+# wheel, jaraco.context (vendored by setuptools) and setuptools, msgpack
+# (vendored by pip, reported from pip/_vendor/bom.cdx.json): install
+# toolchain only; nothing is installed at runtime
 CVE-2026-24049
 CVE-2026-23949
-# jq/libjq1 (Debian package; the binary is never invoked by entrypoint.sh or
-# the export path)
-CVE-2026-32316
+CVE-2025-47273
+GHSA-6v7p-g79w-8964
