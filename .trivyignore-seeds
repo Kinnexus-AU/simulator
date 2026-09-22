@@ -32,6 +32,10 @@ CVE-2025-43859
 CVE-2024-47874
 CVE-2026-48818
 CVE-2026-54283
+# anyio (pulled in by starlette; the flaw is in TLSStream's client-side host
+# name check — fhirsnake never opens anyio TLS streams, its HTTP client is
+# requests)
+CVE-2026-63374
 # urllib3 (used for the converter calls, but the only peer is the first-party
 # in-cluster questionnaire-converter; the CVEs require a hostile server)
 CVE-2025-66418
