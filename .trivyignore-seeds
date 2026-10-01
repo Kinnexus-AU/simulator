@@ -42,10 +42,15 @@ CVE-2025-66418
 CVE-2025-66471
 CVE-2026-21441
 CVE-2026-44431
+CVE-2026-97689
+# urllib3 HTTPS-proxy TLS override: no proxy is configured for the init
+# container
+CVE-2026-97687
 # wheel, jaraco.context (vendored by setuptools) and setuptools, msgpack
-# (vendored by pip, reported from pip/_vendor/bom.cdx.json): install
-# toolchain only; nothing is installed at runtime
+# (vendored by pip, reported from pip/_vendor/bom.cdx.json), virtualenv:
+# install toolchain only; nothing is installed at runtime
 CVE-2026-24049
 CVE-2026-23949
 CVE-2025-47273
 GHSA-6v7p-g79w-8964
+CVE-2026-102930
