@@ -15,13 +15,16 @@
         "cross-spawn": "7.0.6",
         "fast-uri": "3.1.8",
         "flatted": "3.4.2",
+        "follow-redirects": "1.16.1",
         "form-data": "4.0.6",
-        "handlebars": "4.7.9",
+        "handlebars": "4.7.10",
         "immutable": "5.1.8",
         "joi": "17.13.8",
         "lodash": "4.18.1",
         "nanoid": "3.3.18",
         "postcss": "8.5.26",
+        "source-map-js": "1.2.2",
+        "storybook": "8.6.19",
         "ws": "8.21.2"
     },
     "scripts": {
