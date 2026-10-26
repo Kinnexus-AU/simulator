@@ -17,8 +17,15 @@
 # vite (build tool; fix requires a 4.x -> 5.x+ major upgrade)
 CVE-2024-52011
 CVE-2026-53571
+# vite dev-server open-in-editor endpoint (4.x direct, 5.x via vitest 0.34);
+# the dev server binds to localhost only; fix requires 6.4.4+
+CVE-2026-112942
 # vitest (test runner, workspace devDep)
 CVE-2026-47429
+# tinypool (vitest 0.33/0.34 worker pool; options come from our own test
+# config; fix requires tinypool 2.x, i.e. a vitest major upgrade)
+CVE-2026-104848
+CVE-2026-104849
 # playwright (via @storybook/test-runner)
 CVE-2025-59288
 # tmp (via @lingui/cli -> inquirer -> external-editor)
