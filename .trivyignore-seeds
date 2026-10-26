@@ -48,7 +48,8 @@ CVE-2026-97689
 CVE-2026-97687
 # wheel, jaraco.context (vendored by setuptools) and setuptools, msgpack
 # (vendored by pip, reported from pip/_vendor/bom.cdx.json), virtualenv:
-# install toolchain only; nothing is installed at runtime
+# install toolchain only; poetry runs at startup via the entrypoint's
+# `poetry run`, but nothing is installed or created at runtime
 CVE-2026-24049
 CVE-2026-23949
 CVE-2025-47273
@@ -58,3 +59,23 @@ CVE-2026-102930
 # prompt): nothing creates or activates an environment at runtime
 CVE-2026-102925
 CVE-2026-102937
+# certifi (fhirsnake venv, poetry's system Python, and pip's vendored copy
+# reported from pip/_vendor/bom.cdx.json): the only outbound call is plain
+# HTTP to the in-cluster questionnaire-converter, so no TLS connection is
+# opened and the CA bundle is never consulted
+GHSA-6q48-6c7w-9gw2
+# filelock (poetry toolchain): the ReadWriteLock flaw needs a local attacker
+# with rename access to the lock's parent directory; the init container runs
+# a single process with no other local users
+CVE-2026-112940
+# virtualenv activation-script and console-script generation (xonsh, bash,
+# zsh and fish prompts; ScriptMaker launchers): the entrypoint's `poetry run`
+# reuses the venv baked in at build time, so nothing creates an environment,
+# writes activation scripts or installs console scripts at runtime
+CVE-2026-113718
+CVE-2026-113722
+CVE-2026-113723
+CVE-2026-113725
+CVE-2026-113726
+CVE-2026-113732
+CVE-2026-113776
