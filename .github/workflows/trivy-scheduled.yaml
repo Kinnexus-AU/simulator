@@ -13,11 +13,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # Deployed tags — keep in sync with the image tags in
+        # infra/kustomize/emr.yaml (emr) and infra/kustomize/aidbox.yaml
+        # (seeds) when rolling out a release.
+        # "latest" previews the most recent build.
         suffix:
           - ""
           - "-seeds"
         tag:
-          - "0.0.25"
+          - "0.0.26"
           - latest
     env:
       REGISTRY: ghcr.io
