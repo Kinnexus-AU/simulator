@@ -9,7 +9,6 @@ const require = createRequire(import.meta.url);
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => ({
     server: {
-        host: '0.0.0.0',
         port: command === 'build' ? 5000 : 3000,
     },
     plugins: [
