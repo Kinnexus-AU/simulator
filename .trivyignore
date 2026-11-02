@@ -1,7 +1,8 @@
-# TEMPORARY — scanner limitation, not accepted product risk.
+# TEMPORARY — scanner limitation, not accepted product risk (except the
+# RUNTIME section at the end).
 #
-# All entries below are devDependencies (build/test tooling) that never ship in
-# the runtime bundle. Trivy fails to exclude dev dependencies for this repo:
+# All entries above the RUNTIME section are devDependencies (build/test
+# tooling) that never ship in the runtime bundle. Trivy fails to exclude dev dependencies for this repo:
 # the yarn workspace walker aborts on wildcard version specs
 # ("@types/node": "*", requested by vitest and @jest/types) and then counts
 # every devDependency as production-reachable. Reproduced with trivy v0.73.0:
@@ -41,3 +42,14 @@ CVE-2026-27904
 CVE-2026-13149
 CVE-2026-14257
 CVE-2026-69152
+
+# ---------------------------------------------------------------------------
+# RUNTIME — accepted risk, ships in the browser bundle (not a dev dependency).
+
+# decode-uri-component 0.2.2 (via query-string 7 in
+# @beda.software/fhir-questionnaire and sdc-qrf): quadratic CPU on malformed
+# percent-encoded input. It runs client-side on the user's own URL, so a crafted
+# link can only slow that browser tab. No fixed 0.2.x exists and the ESM-only
+# 0.5.1 can't be forced under query-string 7's require(); remove once both
+# packages move to query-string 8+ and decode-uri-component is pinned to 0.5.1.
+CVE-2026-118664
