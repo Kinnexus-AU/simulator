@@ -79,3 +79,8 @@ CVE-2026-113725
 CVE-2026-113726
 CVE-2026-113732
 CVE-2026-113776
+# msgpack 1.2.2 (CacheControl dependency of poetry in the system Python) and
+# 1.1.2 (pip vendored, pure Python): the C-extension leak needs
+# attacker-controlled msgpack input; CacheControl only reads poetry's own HTTP
+# cache, and `poetry run` makes no repository requests
+CVE-2026-114613
